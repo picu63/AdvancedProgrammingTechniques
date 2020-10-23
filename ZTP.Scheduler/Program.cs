@@ -6,7 +6,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using ZTP.Scheduler.Models;
+using FluentMailer;
+using FluentMailer.Interfaces;
+using CsvHelper.Configuration;
+using ZTP.Scheduler.Services;
 
 namespace ZTP.Scheduler
 {
@@ -14,14 +19,15 @@ namespace ZTP.Scheduler
     {
         static void Main(string[] args)
         {
-            string filePath = "";
+            var filePath = Path.Combine(Directory.GetCurrentDirectory()+ Path.DirectorySeparatorChar + "zamowienia.csv");
             //1. Odczytać dane z pliku csv
-            using (StreamReader streamReader = new StreamReader(filePath))
-            using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+            using (var streamReader = new StreamReader(filePath))
+            using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
             {
-                List<Order> orders = csvReader.GetRecords<Order>().ToList();
+                var orders = csvReader.GetRecords<Order>().ToList();
+                var mailService = new MailService();
+                mailService.SendOrders(orders);
             }
-            
         }
     }
 }

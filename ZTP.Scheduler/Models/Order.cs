@@ -12,10 +12,13 @@ namespace ZTP.Scheduler.Models
         public int Id { get; set; }
         public string Imie { get; set; }
         public string Nazwisko { get; set; }
+        public string Email { get; set; }
+        [Name("Nr. zamowienia")]
         public int NrZamowienia { get; set; }
         public decimal Cena { get; set; }
+        public string Produkt { get; set; }
         public decimal Ilosc { get; set; }
-        [Name("Adres przyjmującego zlecenie")]
-        public int AdresZamowienia { get; set; }
+        [Name("Adres przyjmujacego zlecenie")]
+        public string AdresPrzyjmujacego { get; set; }
     }
 }
