@@ -16,6 +16,12 @@ namespace ZTP.Scheduler.Models
         public decimal Cena { get; set; }
         public decimal Ilosc { get; set; }
         [Name("Adres przyjmującego zlecenie")]
-        public int AdresZamowienia { get; set; }
+        public string AdresZamowienia { get; set; }
+        public string email { get; set; }
+
+        public override string ToString()
+        {
+            return $"{Id},{Imie},{Nazwisko},{NrZamowienia},{Cena},{Ilosc},{AdresZamowienia},{email}";
+        }
     }
 }
