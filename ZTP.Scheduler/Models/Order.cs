@@ -19,9 +19,9 @@ namespace ZTP.Scheduler.Models
         public string AdresZamowienia { get; set; }
         public string email { get; set; }
 
-        public override string ToString()
+        /*public override string ToString()
         {
             return $"{Id},{Imie},{Nazwisko},{NrZamowienia},{Cena},{Ilosc},{AdresZamowienia},{email}";
-        }
+        }*/
     }
 }
