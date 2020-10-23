@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
+using FluentEmail.Core;
+using Microsoft.Extensions.DependencyInjection;
 using ZTP.Scheduler.Models;
 
 namespace ZTP.Scheduler
@@ -14,14 +18,26 @@ namespace ZTP.Scheduler
     {
         static void Main(string[] args)
         {
-            string filePath = "";
-            //1. Odczytać dane z pliku csv
-            using (StreamReader streamReader = new StreamReader(filePath))
-            using (CsvReader csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+            var filePath = string.Empty;
+            if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
             {
-                List<Order> orders = csvReader.GetRecords<Order>().ToList();
+                Console.WriteLine("Brak ścieżki do pliku. Podaj ścieżkę do pliku z mailami.");
+                filePath = Console.ReadLine();
+            }
+            else
+            {
+                filePath = args[0];
             }
             
+            List<Order> orders;
+            //1. Odczytać dane z pliku csv
+            using (var streamReader = new StreamReader(filePath))
+            using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
+            {
+                csvReader.Configuration.HasHeaderRecord = false;
+                orders = csvReader.GetRecords<Order>().ToList();
+            }
+            var sended = SmtpService.SendOrders(orders).ToList();
         }
     }
 }

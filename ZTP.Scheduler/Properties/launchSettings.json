@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ZTP.Scheduler": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\picu6\\source\\repos\\ZTP\\csv_file_200.csv"
+    }
+  }
+}
