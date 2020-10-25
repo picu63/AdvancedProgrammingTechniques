@@ -15,53 +15,56 @@ using ZTP.Scheduler.Models;
 
 namespace ZTP.Scheduler
 {
-    public static class SmtpService
+    public class SmtpService
     {
-        public static void SendTemplate()
+        public SmtpService(string userName, string password, string host, int port, bool useSsl = false)
         {
-			var message = new MimeMessage();
-            message.From.Add(new MailboxAddress("Joey Tribbiani", "joey@friends.com"));
-            message.To.Add(new MailboxAddress("Mrs. Chanandler Bong", "chandler@friends.com"));
-            message.To.Add(new MailboxAddress("Pietrek Olearczyk", "polearczyk@jantar.pl"));
-            message.Subject = "How you doin'?";
+            this.userName = userName;
+            this.password = password;
+            this.host = host;
+            this.port = port;
+            this.useSsl = useSsl;
+        }
 
-            message.Body = new TextPart("plain")
-            {
-                Text = @"Hey Chandler,
-
-I just wanted to let you know that Monica and I were going to go play some paintball, you in?
-
--- Joey"
-            };
-
-            SendAsync(message);
-		}
+        private readonly string userName;
+        private string password;
+        private string host;
+        private int port;
+        private bool useSsl;
 
         /// <summary>
         /// Sends orders by  given collection.
         /// </summary>
         /// <param name="orders"></param>
-        /// <param name="count"></param>
         /// <returns>Orders sent.</returns>
-        public static IEnumerable<Order> SendOrders(List<Order> orders)
+        public async Task<ICollection<Order>> SendOrders(IEnumerable<Order> orders)
         {
-            var ordersBag = new ConcurrentBag<Order>();
-            var tasks = new ConcurrentBag<Task>();
-            foreach (var order in orders)
+            try
             {
-                var message = CreateOrderMessage(order);
-                tasks.Add(SendAsync(message).ContinueWith((t) =>
-                {
-                    if (t.Result)
-                    {
-                        Console.WriteLine($"Wysłano {order}");
-                        ordersBag.Add(order);
-                    }
-                }, TaskContinuationOptions.OnlyOnRanToCompletion));
-            }
+                var ordersSent = new ConcurrentBag<Order>();
+                var tasks = new ConcurrentBag<Task>();
 
-            Task.WaitAll(tasks.ToArray());
-            return ordersBag;
+                foreach (var order in orders)
+                {
+                    var message = CreateOrderMessage(order);
+                    tasks.Add(this.SendAsync(message).ContinueWith((t) =>
+                    {
+                        if (t.Result)
+                        {
+                            Console.WriteLine($"Wysłano {order}");
+                            ordersSent.Add(order); 
+                        }
+                    }));
+                }
+
+                Task.WaitAll(tasks.ToArray());
+                return ordersSent.ToArray();
+            }
+            catch (Exception ex)
+            {
+                //logger
+                throw;
+            }
         }
 
         private static MimeMessage CreateOrderMessage(Order order)
@@ -74,13 +77,13 @@ I just wanted to let you know that Monica and I were going to go play some paint
             body.TextBody = $@"You have one new order
 {order}";
             body.HtmlBody = $@"<h1><b>You have one new order</b></h1>
-<p>Id: {order.NrZamowienia}</p>
-<p></p>";
+<p>Order ID: {order.NrZamowienia}</p>
+<p>{order.Imie}</p>";
             message.Body = body.ToMessageBody();
             return message;
         }
 
-        public static async Task<bool> SendAsync(MimeMessage message)
+        private async Task<bool> SendAsync(MimeMessage message)
         {
             try
             {
@@ -91,15 +94,13 @@ I just wanted to let you know that Monica and I were going to go play some paint
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
-
                 return true;
             }
             catch (Exception ex)
             {
-
+                //logger
                 return false;
             }
         }
-        
     }
 }

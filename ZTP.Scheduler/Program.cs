@@ -8,8 +8,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Mail;
+using System.Threading;
+using System.Threading.Tasks;
 using FluentEmail.Core;
 using Microsoft.Extensions.DependencyInjection;
+using NLog;
+using Org.BouncyCastle.Asn1.Cms;
 using ZTP.Scheduler.Models;
 
 namespace ZTP.Scheduler
@@ -18,26 +22,58 @@ namespace ZTP.Scheduler
     {
         static void Main(string[] args)
         {
-            var filePath = string.Empty;
-            if (args.Length == 0 || string.IsNullOrEmpty(args[0]))
+            LoadConfiguration();
+
+            RunService();
+
+            Console.WriteLine("Ukończono wysyłanie wszystkich zamówień.");
+            Console.ReadKey();
+        }
+
+        private static void LoadConfiguration()
+        {
+            var configServices = new ConfigServices();
+            var configFile = configServices.Get<ConfigFile>(GlobalConfig.ConfigPath);
+            GlobalConfig.CsvFile = configFile.CsvFile;
+            GlobalConfig.Smtp.UserName = configFile.Smtp.UserName;
+            GlobalConfig.Smtp.Host = configFile.Smtp.Host;
+            GlobalConfig.Smtp.Password = configFile.Smtp.Password;
+            GlobalConfig.Smtp.Port = configFile.Smtp.Port;
+        }
+
+        private static void RunService()
+        {
+            while (true)
             {
-                Console.WriteLine("Brak ścieżki do pliku. Podaj ścieżkę do pliku z mailami.");
-                filePath = Console.ReadLine();
+
+                string filePath = GlobalConfig.CsvFile;
+                if (!File.Exists(filePath))
+                {
+                    throw new FileNotFoundException();
+                }
+                var ordersLeft = new List<Order>();
+                ordersLeft =
+                    (List<Order>)DataService.ReadFromCsvFile<Order>(filePath,
+                        CultureInfo.InvariantCulture);
+                do
+                {
+                    var ordersToSent = (ordersLeft.Count >= 100)
+                        ? ordersLeft.Take(100).ToList()
+                        : ordersLeft.Take(ordersLeft.Count).ToList();
+                    var smtpService = new SmtpService(GlobalConfig.Smtp.UserName, GlobalConfig.Smtp.Password,
+                        GlobalConfig.Smtp.Host, GlobalConfig.Smtp.Port);
+                    var ordersSent = smtpService.SendOrders(ordersToSent.ToList()).Result;
+                    ordersLeft = ordersLeft.Except(ordersSent).ToList();
+                    if (!ordersLeft.Any())
+                    {
+                        ordersLeft = null;
+                    }
+                    else
+                    {
+                        Thread.Sleep(10000);
+                    }
+                } while (ordersLeft != null);
             }
-            else
-            {
-                filePath = args[0];
-            }
-            
-            List<Order> orders;
-            //1. Odczytać dane z pliku csv
-            using (var streamReader = new StreamReader(filePath))
-            using (var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture))
-            {
-                csvReader.Configuration.HasHeaderRecord = false;
-                orders = csvReader.GetRecords<Order>().ToList();
-            }
-            var sended = SmtpService.SendOrders(orders).ToList();
         }
     }
 }
