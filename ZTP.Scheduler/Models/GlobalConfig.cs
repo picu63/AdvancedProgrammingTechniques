@@ -8,7 +8,7 @@ namespace ZTP.Scheduler.Models
     public static class GlobalConfig
     {
         public static string ApplicationDirectory = Directory.GetCurrentDirectory();
-        public static string PathSeparate = "\\";
+        public static char PathSeparate = Path.DirectorySeparatorChar;
         /// <summary>
         /// Ścieżka pliku z konfiguracją.
         /// </summary>

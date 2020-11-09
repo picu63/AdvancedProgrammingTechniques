@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ConfigFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <CsvFile>C:\Users\picu6\source\repos\ZTP\csv_file_200.csv</CsvFile>
+  <CsvFile>C:\Users\picu6\source\repos\ZTP\ZTP.Scheduler\bin\Debug\netcoreapp3.1\csv_file_200.csv</CsvFile>
   <Smtp>
     <UserName>mina97@ethereal.email</UserName>
     <Host>smtp.ethereal.email</Host>

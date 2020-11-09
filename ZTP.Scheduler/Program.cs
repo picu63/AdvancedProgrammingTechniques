@@ -22,12 +22,17 @@ namespace ZTP.Scheduler
     {
         static void Main(string[] args)
         {
-            LoadConfiguration();
+            try
+            {
+                LoadConfiguration();
 
-            RunService();
-
-            Console.WriteLine("Ukończono wysyłanie wszystkich zamówień.");
-            Console.ReadKey();
+                RunService();
+            }
+            catch (Exception ex)
+            {
+                //logger
+                throw;
+            }
         }
 
         private static void LoadConfiguration()
@@ -51,9 +56,8 @@ namespace ZTP.Scheduler
                 {
                     throw new FileNotFoundException();
                 }
-                var ordersLeft = new List<Order>();
-                ordersLeft =
-                    (List<Order>)DataService.ReadFromCsvFile<Order>(filePath,
+                var ordersLeft =
+                    DataService.ReadFromCsvFile<Order>(filePath,
                         CultureInfo.InvariantCulture);
                 do
                 {
@@ -73,6 +77,11 @@ namespace ZTP.Scheduler
                         Thread.Sleep(10000);
                     }
                 } while (ordersLeft != null);
+
+                if (File.Exists(filePath))
+                {
+                    File.Delete(filePath);
+                }
             }
         }
     }

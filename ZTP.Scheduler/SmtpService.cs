@@ -27,10 +27,10 @@ namespace ZTP.Scheduler
         }
 
         private readonly string userName;
-        private string password;
-        private string host;
-        private int port;
-        private bool useSsl;
+        private readonly string password;
+        private readonly string host;
+        private readonly int port;
+        private readonly bool useSsl;
 
         /// <summary>
         /// Sends orders by  given collection.
@@ -78,7 +78,10 @@ namespace ZTP.Scheduler
 {order}";
             body.HtmlBody = $@"<h1><b>You have one new order</b></h1>
 <p>Order ID: {order.NrZamowienia}</p>
-<p>{order.Imie}</p>";
+<p>{order.Imie}</p>
+<p>{order.Nazwisko}</p>
+<p>{order.NumerPaczki}</p>
+<p>{order.Cena}</p>";
             message.Body = body.ToMessageBody();
             return message;
         }
@@ -89,8 +92,8 @@ namespace ZTP.Scheduler
             {
                 using (var client = new SmtpClient())
                 {
-                    await client.ConnectAsync("smtp.ethereal.email", 587, false);
-                    await client.AuthenticateAsync("mina97@ethereal.email", "9gwZB43UAeBThEJV8X");
+                    await client.ConnectAsync(this.host, this.port, this.useSsl);
+                    await client.AuthenticateAsync(this.userName, this.password);
                     await client.SendAsync(message);
                     await client.DisconnectAsync(true);
                 }
