@@ -13,7 +13,7 @@ using CsvHelper.TypeConversion;
 
 namespace DataProvider
 {
-    public class CsvService
+    public class CsvService : ICsvService
     {
         private static CsvService csvService;
         public static CsvService GetInstance()
@@ -27,9 +27,10 @@ namespace DataProvider
         }
 
         public CsvReader CsvReader { get; private set; }
-        public IEnumerable<T> ReadCsvToModels<T>(string path)
+
+        public IEnumerable<T> ReadCsvToModel<T>(string csvPath)
         {
-            var streamReader = new StreamReader(path);
+            var streamReader = new StreamReader(csvPath);
             CsvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
             return CsvReader.GetRecords<T>();
         }

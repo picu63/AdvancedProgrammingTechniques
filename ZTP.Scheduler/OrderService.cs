@@ -1,36 +1,26 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using FluentEmail.Core;
-using FluentEmail.Smtp;
-using FluentEmail.Razor;
-using Microsoft.Extensions.DependencyInjection;
 using MimeKit;
 using MailKit.Net.Smtp;
+using MailService;
 using ZTP.Scheduler.Models;
 
 namespace ZTP.Scheduler
 {
-    public class SmtpService
+    public class OrderService
     {
-        public SmtpService(string userName, string password, string host, int port, bool useSsl = false)
+        private SmtpService smtpService;
+        public OrderService()
         {
-            this.userName = userName;
-            this.password = password;
-            this.host = host;
-            this.port = port;
-            this.useSsl = useSsl;
+            var smtpSection = ConfigurationManager.GetSection("system.net / mailSettings / smtp");
+            //smtpService = new SmtpService();
         }
-
-        private readonly string userName;
-        private readonly string password;
-        private readonly string host;
-        private readonly int port;
-        private readonly bool useSsl;
 
         /// <summary>
         /// Sends orders by  given collection.
@@ -84,26 +74,6 @@ namespace ZTP.Scheduler
 <p>{order.Cena}</p>";
             message.Body = body.ToMessageBody();
             return message;
-        }
-
-        private async Task<bool> SendAsync(MimeMessage message)
-        {
-            try
-            {
-                using (var client = new SmtpClient())
-                {
-                    await client.ConnectAsync(this.host, this.port, this.useSsl);
-                    await client.AuthenticateAsync(this.userName, this.password);
-                    await client.SendAsync(message);
-                    await client.DisconnectAsync(true);
-                }
-                return true;
-            }
-            catch (Exception ex)
-            {
-                //logger
-                return false;
-            }
         }
     }
 }

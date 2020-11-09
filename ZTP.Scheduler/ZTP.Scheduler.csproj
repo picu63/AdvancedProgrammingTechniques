@@ -6,26 +6,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="ConfigFile.xml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="ConfigFile.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Bogus" Version="31.0.3" />
-    <PackageReference Include="FluentEmail.MailKit" Version="2.8.0" />
-    <PackageReference Include="FluentEmail.Razor" Version="2.8.0" />
-    <PackageReference Include="FluentEmail.Smtp" Version="2.8.0" />
     <PackageReference Include="NLog" Version="4.7.5" />
     <PackageReference Include="NLog.Config" Version="4.7.5" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\DataProvider\DataProvider.csproj" />
+    <ProjectReference Include="..\MailService\MailService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
