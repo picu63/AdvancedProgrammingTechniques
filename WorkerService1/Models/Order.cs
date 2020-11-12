@@ -6,7 +6,7 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 
-namespace WorkerService1.Models
+namespace Scheduler.Models
 {
     public class Order
     {

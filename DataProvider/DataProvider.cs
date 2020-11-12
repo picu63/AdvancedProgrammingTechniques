@@ -13,14 +13,16 @@ using CsvHelper.TypeConversion;
 
 namespace DataProvider
 {
-    public class CsvService : ICsvReader
+    public class DataProvider : ICsvReader
     {
-        public CsvService(string csvPath)
+        public DataProvider(string filePath)
         {
-            var streamReader = new StreamReader(csvPath);
-            CsvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
+            _streamReader = new StreamReader(filePath);
+            CsvReader = new CsvReader(_streamReader, CultureInfo.CurrentCulture);
         }
-        public CsvReader CsvReader { get; private set; }
+
+        private readonly StreamReader _streamReader;
+        public CsvReader CsvReader { get; }
 
         public IEnumerable<T> ReadCsvToModels<T>(string csvPath)
         {

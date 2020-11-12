@@ -1,8 +1,7 @@
 {
   "profiles": {
-    "WorkerService1": {
+    "Scheduler": {
       "commandName": "Project",
-      "commandLineArgs": "TestFiles\\csv_file_200.csv",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }

@@ -13,9 +13,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using WorkerService1.Models;
+using Scheduler.Models;
 
-namespace WorkerService1
+namespace Scheduler
 {
     public class Worker : BackgroundService
     {
@@ -91,16 +91,23 @@ namespace WorkerService1
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                var orders = CsvReader.GetRecords<Order>().Take(100);
-
+                _logger.LogInformation($"Starting cycle: {DateTimeOffset.Now}");
+                _logger.LogInformation($"Getting data from file...");
+                var orders = CsvReader.GetRecords<Order>().Take(5).ToList();
+                if(!orders.Any())
+                {
+                    await Task.Delay(60000, stoppingToken);
+                    continue;
+                }
+                _logger.LogInformation($"Found {orders.Count()} orders for send.");
+                _logger.LogInformation("Starting sending process...");
                 foreach (var order in orders)
                 {
                     var message = CreateOrderMessage(order);
                     _logger.LogInformation($"Sending message: {order}");
                     await _smtpClient.SendAsync(message, stoppingToken);
                 }
-                await Task.Delay(15000, stoppingToken); //TODO Wykonywanie raz na minutê
+                await Task.Delay(10000, stoppingToken); //TODO Wykonywanie raz na minutê
             }
         }
 
