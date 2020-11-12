@@ -57,7 +57,8 @@ namespace WorkerService1
         {
             var filePath = _config.GetValue<string>("CsvFilePath");
             var sb = new StreamReader(filePath);
-            CsvReader = new CsvReader(sb, CultureInfo.CurrentCulture);
+            CsvReader = new CsvReader(sb, CultureInfo.InvariantCulture);
+            CsvReader.Configuration.HasHeaderRecord = false;
         }
 
         public override async Task StopAsync(CancellationToken cancellationToken)
@@ -91,16 +92,15 @@ namespace WorkerService1
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                //TODO odczytywanie danych z pliku csv
                 var orders = CsvReader.GetRecords<Order>().Take(100);
-                //TODO foreach do ka¿dego z Order i wys³anie max 100
-                var i = 1;
+
                 foreach (var order in orders)
                 {
                     var message = CreateOrderMessage(order);
+                    _logger.LogInformation($"Sending message: {order}");
                     await _smtpClient.SendAsync(message, stoppingToken);
                 }
-                await Task.Delay(5000, stoppingToken); //TODO Wykonywanie raz na minutê
+                await Task.Delay(15000, stoppingToken); //TODO Wykonywanie raz na minutê
             }
         }
 
