@@ -21,8 +21,7 @@ namespace MailService
         /// <param name="enableSsl">Jeśli true to szyfrowanie SSL po TLS.</param>
         public SmtpService(string userLogin, string password, string host, int port, bool enableSsl = false)
         {
-            this.SmtpClient = new SmtpClient();
-            this.SmtpClient.Timeout = 5000;
+            this.SmtpClient = new SmtpClient {Timeout = 5000};
             this.SmtpClient.Connect(host, port);
             this.SmtpClient.Authenticate(userLogin, password);
         }

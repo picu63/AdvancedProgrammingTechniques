@@ -1,8 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Dynamic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using CsvHelper;
 using DataProvider;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Configuration;
@@ -18,24 +22,48 @@ namespace WorkerService1
         private readonly ILogger<Worker> _logger;
         private readonly IConfiguration _config;
         private readonly ISmtpClient _smtpClient;
-        private readonly ICsvService _csvService;
+        public CsvReader CsvReader { get; private set; }
+        public CsvWriter CsvWriter { get; private set; }
         public Worker(ILogger<Worker> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;
             _smtpClient = new SmtpClient();
-            _csvService = new CsvService();
         }
 
         public override async Task StartAsync(CancellationToken cancellationToken)
         {
-            _logger.LogInformation("Reading configuration");
+            _logger.LogInformation("Reading application settings...");
             var (host, port, from, password) = GetSmtpFromConfiguration();
 
-            _logger.LogInformation("Connecting to the smtp server");
+            _logger.LogInformation("Initializing data reader...");
+            InitializeDataReader();
+
+            _logger.LogInformation("Initializing data writer...");
+            InitializeDataWriter();
+
+            _logger.LogInformation("Connecting to the smtp server...");
             await ConnectToSmtpAsync(host, port, from, password, cancellationToken);
 
             await base.StartAsync(cancellationToken);
+        }
+
+        private void InitializeDataWriter()
+        {
+            var filePath = Directory.GetCurrentDirectory();
+        }
+
+        private void InitializeDataReader()
+        {
+            var filePath = _config.GetValue<string>("CsvFilePath");
+            var sb = new StreamReader(filePath);
+            CsvReader = new CsvReader(sb, CultureInfo.CurrentCulture);
+        }
+
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            await _smtpClient.DisconnectAsync(false, cancellationToken);
+            await base.StopAsync(cancellationToken);
         }
 
         private async Task ConnectToSmtpAsync(string host, int port, string @from, string password, CancellationToken cancellationToken)
@@ -64,12 +92,14 @@ namespace WorkerService1
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 //TODO odczytywanie danych z pliku csv
+                var orders = CsvReader.GetRecords<Order>().Take(100);
                 //TODO foreach do ka¿dego z Order i wys³anie max 100
-                //foreach (var order in orders)
-                //{
-                var message = CreateOrderMessage(new Order());
-                await _smtpClient.SendAsync(message, stoppingToken);
-                //}
+                var i = 1;
+                foreach (var order in orders)
+                {
+                    var message = CreateOrderMessage(order);
+                    await _smtpClient.SendAsync(message, stoppingToken);
+                }
                 await Task.Delay(5000, stoppingToken); //TODO Wykonywanie raz na minutê
             }
         }

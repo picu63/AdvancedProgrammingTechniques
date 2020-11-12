@@ -13,25 +13,17 @@ using CsvHelper.TypeConversion;
 
 namespace DataProvider
 {
-    public class CsvService : ICsvService
+    public class CsvService : ICsvReader
     {
-        private static CsvService csvService;
-        public static CsvService GetInstance()
-        {
-            if (csvService == null)
-            {
-                csvService = new CsvService();
-                return csvService;
-            }
-            return csvService;
-        }
-
-        public CsvReader CsvReader { get; private set; }
-
-        public IEnumerable<T> ReadCsvToModel<T>(string csvPath)
+        public CsvService(string csvPath)
         {
             var streamReader = new StreamReader(csvPath);
             CsvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
+        }
+        public CsvReader CsvReader { get; private set; }
+
+        public IEnumerable<T> ReadCsvToModels<T>(string csvPath)
+        {
             return CsvReader.GetRecords<T>();
         }
     }
