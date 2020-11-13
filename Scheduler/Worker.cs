@@ -24,6 +24,7 @@ namespace Scheduler
         private readonly ISmtpClient _smtpClient;
         public CsvReader CsvReader { get; private set; }
         public CsvWriter CsvWriter { get; private set; }
+        private int maxMailsAtOnce;
         public Worker(ILogger<Worker> logger, IConfiguration config)
         {
             _logger = logger;
@@ -35,6 +36,7 @@ namespace Scheduler
         {
             _logger.LogInformation("Reading application settings...");
             var (host, port, from, password) = GetSmtpFromConfiguration();
+            this.maxMailsAtOnce = _config.GetValue<int>(key: "MaxMailsAtOnce");
 
             _logger.LogInformation("Initializing data reader...");
             InitializeDataReader();
@@ -93,7 +95,7 @@ namespace Scheduler
             {
                 _logger.LogInformation($"Starting cycle: {DateTimeOffset.Now}");
                 _logger.LogInformation($"Getting data from file...");
-                var orders = CsvReader.GetRecords<Order>().Take(5).ToList();
+                var orders = CsvReader.GetRecords<Order>().Take(maxMailsAtOnce).ToList();
                 if(!orders.Any())
                 {
                     await Task.Delay(60000, stoppingToken);
@@ -103,23 +105,12 @@ namespace Scheduler
                 _logger.LogInformation("Starting sending process...");
                 foreach (var order in orders)
                 {
-                    var message = CreateOrderMessage(order);
+                    var message = OrderService.CreateMessage(order);
                     _logger.LogInformation($"Sending message: {order}");
                     await _smtpClient.SendAsync(message, stoppingToken);
                 }
-                await Task.Delay(10000, stoppingToken); //TODO Wykonywanie raz na minutê
+                await Task.Delay(60000, stoppingToken);
             }
-        }
-
-        //TODO Przenieœæ do klasy np OrderService i poprawiæ
-        private static MimeMessage CreateOrderMessage(Order order)
-        {
-            var message = new MimeMessage();
-            message.From.Add(MailboxAddress.Parse("mina97@ethereal.email"));
-            message.To.Add(MailboxAddress.Parse("mina97@ethereal.email"));
-            message.Subject = "How you doin?";
-            message.Body = new TextPart("body") {Text = "To jest przyk³adowy tekst"};
-            return message;
         }
     }
 }
