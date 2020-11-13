@@ -23,7 +23,7 @@ namespace Scheduler
         private readonly IConfiguration _config;
         private readonly ISmtpClient _smtpClient;
         public CsvReader CsvReader { get; private set; }
-        public CsvWriter CsvWriter { get; private set; }
+
         private int maxMailsAtOnce;
         public Worker(ILogger<Worker> logger, IConfiguration config)
         {
@@ -41,25 +41,18 @@ namespace Scheduler
             _logger.LogInformation("Initializing data reader...");
             InitializeDataReader();
 
-            _logger.LogInformation("Initializing data writer...");
-            InitializeDataWriter();
-
             _logger.LogInformation("Connecting to the smtp server...");
             await ConnectToSmtpAsync(host, port, from, password, cancellationToken);
 
             await base.StartAsync(cancellationToken);
         }
 
-        private void InitializeDataWriter()
-        {
-            var filePath = Directory.GetCurrentDirectory();
-        }
 
         private void InitializeDataReader()
         {
             var filePath = _config.GetValue<string>("CsvFilePath");
-            var sb = new StreamReader(filePath);
-            CsvReader = new CsvReader(sb, CultureInfo.InvariantCulture);
+            var sr = new StreamReader(filePath);
+            CsvReader = new CsvReader(sr, CultureInfo.InvariantCulture);
             CsvReader.Configuration.HasHeaderRecord = false;
         }
 
@@ -69,12 +62,12 @@ namespace Scheduler
             await base.StopAsync(cancellationToken);
         }
 
-        private async Task ConnectToSmtpAsync(string host, int port, string @from, string password, CancellationToken cancellationToken)
+        private async Task ConnectToSmtpAsync(string host, int port, string from, string password, CancellationToken cancellationToken)
         {
             await _smtpClient.ConnectAsync(host, port, false, cancellationToken);
-            await _smtpClient.AuthenticateAsync(@from, password, cancellationToken);
+            await _smtpClient.AuthenticateAsync(from, password, cancellationToken);
         }
-
+        
         private (string host, int port, string from, string password) GetSmtpFromConfiguration()
         {
             var host = _config.GetValue<string>("Smtp:Server");
@@ -94,11 +87,11 @@ namespace Scheduler
             while (!stoppingToken.IsCancellationRequested)
             {
                 _logger.LogInformation($"Starting cycle: {DateTimeOffset.Now}");
-                _logger.LogInformation($"Getting data from file...");
+                _logger.LogInformation("Getting data from file...");
                 var orders = CsvReader.GetRecords<Order>().Take(maxMailsAtOnce).ToList();
                 if(!orders.Any())
                 {
-                    await Task.Delay(60000, stoppingToken);
+                    await WaitAsync(60000, stoppingToken);
                     continue;
                 }
                 _logger.LogInformation($"Found {orders.Count()} orders for send.");
@@ -109,8 +102,14 @@ namespace Scheduler
                     _logger.LogInformation($"Sending message: {order}");
                     await _smtpClient.SendAsync(message, stoppingToken);
                 }
-                await Task.Delay(60000, stoppingToken);
+                await WaitAsync(60000, stoppingToken);
             }
+        }
+
+        private async Task WaitAsync(int milisecondsDelay, CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("Waiting 60 seconds for another cycle...");
+            await Task.Delay(milisecondsDelay, stoppingToken);
         }
     }
 }
