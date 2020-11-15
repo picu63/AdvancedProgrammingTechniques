@@ -88,7 +88,7 @@ namespace Scheduler
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogError($"Starting cycle: {DateTimeOffset.Now}");
+                _logger.LogInformation($"Starting cycle: {DateTimeOffset.Now}");
                 await ExecuteOrderProcessAsync(stoppingToken);
                 await WaitAsync(_cycleTimeMilisec, stoppingToken);
             }

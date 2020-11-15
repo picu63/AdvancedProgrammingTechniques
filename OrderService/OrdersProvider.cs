@@ -8,7 +8,7 @@ using OrderService.Models;
 
 namespace OrderService
 {
-    public class OrdersProvider : IOrdersCsvProvider
+    public class OrdersProvider : IOrdersFromCsvProvider
     {
         public IEnumerable<Order> GetOrdersFromCsv(IReader reader)
         {

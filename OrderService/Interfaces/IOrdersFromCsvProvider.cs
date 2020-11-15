@@ -6,7 +6,7 @@ using OrderService.Models;
 
 namespace OrderService
 {
-    public interface IOrdersCsvProvider
+    public interface IOrdersFromCsvProvider
     {
         IEnumerable<Order> GetOrdersFromCsv(IReader reader);
         IAsyncEnumerable<Order> GetOrdersFromCsvAsync(IReader reader);
