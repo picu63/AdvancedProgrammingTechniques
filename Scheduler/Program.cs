@@ -26,7 +26,7 @@ namespace Scheduler
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
+                    services.AddHostedService<OrdersScheduler>();
                 });
     }
 }

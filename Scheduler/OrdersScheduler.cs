@@ -19,9 +19,9 @@ using OrderLibrary.Models;
 
 namespace Scheduler
 {
-    public class Worker : BackgroundService
+    public class OrdersScheduler : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger<OrdersScheduler> _logger;
         private readonly IConfiguration _config;
         private readonly ISmtpClient _smtpClient;
         private IReader Reader { get; set; }
@@ -29,7 +29,7 @@ namespace Scheduler
         private int _maxMailsAtOnce;
         private int _cycleTimeMilisec;
         private string _sender;
-        public Worker(ILogger<Worker> logger, IConfiguration config)
+        public OrdersScheduler(ILogger<OrdersScheduler> logger, IConfiguration config)
         {
             _logger = logger;
             _config = config;
