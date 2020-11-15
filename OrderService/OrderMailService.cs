@@ -63,7 +63,7 @@ namespace OrderLibrary
             var message = new MimeMessage();
             message.From.Add(from);
             message.To.Add(MailboxAddress.Parse(order.Email));
-            message.Subject = "Order from the best company!";
+            message.Subject = $"Order from the best company! {order.NrZamowienia}";
             message.Body = new BodyBuilder()
                 {
                     TextBody = $"Dear {order.Imie} {order.Nazwisko} your order number: {order.NumerPaczki}" +
@@ -72,6 +72,7 @@ namespace OrderLibrary
                 .ToMessageBody();
             return message;
         }
+
         private static MimeMessage CreateOrderMessageWithLogger(Order order, MailboxAddress from, ILogger logger)
         {
 
