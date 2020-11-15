@@ -4,6 +4,7 @@ using System.Dynamic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
@@ -13,7 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using Scheduler.Models;
+using OrderService;
+using OrderService.Models;
 
 namespace Scheduler
 {
@@ -22,9 +24,11 @@ namespace Scheduler
         private readonly ILogger<Worker> _logger;
         private readonly IConfiguration _config;
         private readonly ISmtpClient _smtpClient;
-        public CsvReader CsvReader { get; private set; }
+        private IReader Reader { get; set; }
 
-        private int maxMailsAtOnce;
+        private int _maxMailsAtOnce;
+        private int _cycleTimeMilisec;
+        private string _sender;
         public Worker(ILogger<Worker> logger, IConfiguration config)
         {
             _logger = logger;
@@ -36,8 +40,9 @@ namespace Scheduler
         {
             _logger.LogInformation("Reading application settings...");
             var (host, port, from, password) = GetSmtpFromConfiguration();
-            this.maxMailsAtOnce = _config.GetValue<int>(key: "MaxMailsAtOnce");
-
+            this._maxMailsAtOnce = _config.GetValue<int>(key: "MaxMailsAtOnce");
+            this._cycleTimeMilisec = _config.GetValue<int>("CycleTimeMilisec");
+            this._sender = from;
             _logger.LogInformation("Initializing data reader...");
             InitializeDataReader();
 
@@ -48,18 +53,13 @@ namespace Scheduler
         }
 
 
+        #region StartAsync Methods
         private void InitializeDataReader()
         {
             var filePath = _config.GetValue<string>("CsvFilePath");
             var sr = new StreamReader(filePath);
-            CsvReader = new CsvReader(sr, CultureInfo.InvariantCulture);
-            CsvReader.Configuration.HasHeaderRecord = false;
-        }
-
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _smtpClient.DisconnectAsync(false, cancellationToken);
-            await base.StopAsync(cancellationToken);
+            Reader = new CsvReader(sr, CultureInfo.InvariantCulture);
+            Reader.Configuration.HasHeaderRecord = false;
         }
 
         private async Task ConnectToSmtpAsync(string host, int port, string from, string password, CancellationToken cancellationToken)
@@ -67,7 +67,7 @@ namespace Scheduler
             await _smtpClient.ConnectAsync(host, port, false, cancellationToken);
             await _smtpClient.AuthenticateAsync(from, password, cancellationToken);
         }
-        
+
         private (string host, int port, string from, string password) GetSmtpFromConfiguration()
         {
             var host = _config.GetValue<string>("Smtp:Server");
@@ -76,9 +76,11 @@ namespace Scheduler
             var password = _config.GetValue<string>("Smtp:Password");
             return (host, port, from, password);
         }
+        #endregion
+
 
         /// <summary>
-        /// Process wykonuj¹cy siê ci¹gle.
+        /// Service running in cycle.
         /// </summary>
         /// <param name="stoppingToken"></param>
         /// <returns></returns>
@@ -86,29 +88,47 @@ namespace Scheduler
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"Starting cycle: {DateTimeOffset.Now}");
-                _logger.LogInformation("Getting data from file...");
-                var orders = CsvReader.GetRecords<Order>().Take(maxMailsAtOnce).ToList();
-                if(!orders.Any())
-                {
-                    await WaitAsync(60000, stoppingToken);
-                    continue;
-                }
-                _logger.LogInformation($"Found {orders.Count()} orders for send.");
-                _logger.LogInformation("Starting sending process...");
-                foreach (var order in orders)
-                {
-                    var message = OrderService.CreateMessage(order);
-                    _logger.LogInformation($"Sending message: {order}");
-                    await _smtpClient.SendAsync(message, stoppingToken);
-                }
-                await WaitAsync(60000, stoppingToken);
+                _logger.LogError($"Starting cycle: {DateTimeOffset.Now}");
+                await ExecuteOrderProcessAsync(stoppingToken);
+                await WaitAsync(_cycleTimeMilisec, stoppingToken);
             }
         }
 
+
+        #region ExecuteAsync Methods
+        private async Task ExecuteOrderProcessAsync(CancellationToken stoppingToken)
+        {
+            _logger.LogInformation("Getting data from file...");
+            var ordersProvider = new OrdersProvider();
+            var orders = ordersProvider.GetOrdersFromCsv(Reader).Take(_maxMailsAtOnce).ToList();
+
+            if (!orders.Any()) return;
+
+            _logger.LogInformation($"Found {orders.Count} orders for send.");
+            _logger.LogInformation("Starting sending process...");
+            var orderMailService = new OrderMailService(_smtpClient, _logger);
+            await orderMailService.SendOrders(orders, stoppingToken);
+        }
+        #endregion
+
+
+        /// <summary>
+        /// Methods for end of 
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        public override async Task StopAsync(CancellationToken cancellationToken)
+        {
+            _logger.LogInformation("Disconecting from smtp server...");
+            await _smtpClient.DisconnectAsync(false, cancellationToken);
+            await base.StopAsync(cancellationToken);
+        }
+
+
+
         private async Task WaitAsync(int milisecondsDelay, CancellationToken stoppingToken)
         {
-            _logger.LogInformation("Waiting 60 seconds for another cycle...");
+            _logger.LogInformation($"Waiting {milisecondsDelay} miliseconds for another cycle...");
             await Task.Delay(milisecondsDelay, stoppingToken);
         }
     }
