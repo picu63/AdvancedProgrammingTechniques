@@ -4,9 +4,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using CsvHelper;
-using OrderService.Models;
+using OrderLibrary.Models;
 
-namespace OrderService
+namespace OrderLibrary
 {
     public class OrdersProvider : IOrdersFromCsvProvider
     {

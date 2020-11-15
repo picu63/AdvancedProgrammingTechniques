@@ -14,8 +14,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using OrderService;
-using OrderService.Models;
+using OrderLibrary;
+using OrderLibrary.Models;
 
 namespace Scheduler
 {

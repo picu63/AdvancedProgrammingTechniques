@@ -8,9 +8,9 @@ using MailKit;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using OrderService.Models;
+using OrderLibrary.Models;
 
-namespace OrderService
+namespace OrderLibrary
 {
     public class OrderMailService
     {

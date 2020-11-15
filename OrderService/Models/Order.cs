@@ -6,7 +6,7 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 
-namespace OrderService.Models
+namespace OrderLibrary.Models
 {
     public class Order
     {

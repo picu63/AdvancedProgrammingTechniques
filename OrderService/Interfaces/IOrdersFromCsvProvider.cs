@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using CsvHelper;
-using OrderService.Models;
+using OrderLibrary.Models;
 
-namespace OrderService
+namespace OrderLibrary
 {
     public interface IOrdersFromCsvProvider
     {
