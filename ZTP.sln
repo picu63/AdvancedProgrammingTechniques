@@ -9,6 +9,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderLibrary", "OrderServic
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataProvider", "DataProvider\DataProvider.csproj", "{1C8F36A8-6DBC-4313-A6C0-E3E633C9BA01}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zad01Scheduler", "Zad01Scheduler", "{4E29C36B-D1AC-4EC5-8715-5E5A6C30E308}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zad02Multilanguage", "Zad02Multilanguage", "{26B15C52-D7FB-483C-BF1C-D4CF7AECB776}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Multilanguage", "Multilanguage\Multilanguage.csproj", "{283DF36B-92C1-494D-9695-FEB91EA2C2E2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,9 +33,19 @@ Global
 		{1C8F36A8-6DBC-4313-A6C0-E3E633C9BA01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C8F36A8-6DBC-4313-A6C0-E3E633C9BA01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C8F36A8-6DBC-4313-A6C0-E3E633C9BA01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{283DF36B-92C1-494D-9695-FEB91EA2C2E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{283DF36B-92C1-494D-9695-FEB91EA2C2E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{283DF36B-92C1-494D-9695-FEB91EA2C2E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{283DF36B-92C1-494D-9695-FEB91EA2C2E2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9A2D8F50-5F76-4031-9493-8F92958BBE80} = {4E29C36B-D1AC-4EC5-8715-5E5A6C30E308}
+		{A4B72FA4-6C91-406F-BE0B-63072D3317E0} = {4E29C36B-D1AC-4EC5-8715-5E5A6C30E308}
+		{1C8F36A8-6DBC-4313-A6C0-E3E633C9BA01} = {4E29C36B-D1AC-4EC5-8715-5E5A6C30E308}
+		{283DF36B-92C1-494D-9695-FEB91EA2C2E2} = {26B15C52-D7FB-483C-BF1C-D4CF7AECB776}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC1FE6C0-B4E8-421D-A69F-771725B9AC96}
