@@ -4,13 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using CarLibrary;
+using ClassLibrary.Models;
 
 namespace Multilanguage.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    public class CarTestController : ControllerBase
+    [Route("CarsApi")]
+    public class CarsApiController : ControllerBase
     {
         private static readonly Car[] Brands = new[]
         {
@@ -19,7 +19,7 @@ namespace Multilanguage.Controllers
                 Brand = "Alfa Romeo",
                 Model = "159",
                 ProductionYear = 2011,
-                LanguageDictionary = new Dictionary<string, string>()
+                Languages = new Dictionary<string, string>()
                 {
                     {
                         "pl_PL",
@@ -36,8 +36,7 @@ namespace Multilanguage.Controllers
                 Brand = "Opel",
                 Model = "Meriva",
                 ProductionYear = 2010,
-                Generation = "II",
-                LanguageDictionary = new Dictionary<string, string>()
+                Languages = new Dictionary<string, string>()
                 {
                     {
                         "pl_PL",
@@ -58,11 +57,18 @@ namespace Multilanguage.Controllers
             //"Opel", "Ford", "BMW", "Honda", "Lamborghini", "Bentley", "Mazda", "Tesla", "Peugot", "Audi"
         };
 
-        private readonly ILogger<CarTestController> _logger;
+        private readonly ILogger<CarsApiController> _logger;
 
-        public CarTestController(ILogger<CarTestController> logger)
+        public CarsApiController(ILogger<CarsApiController> logger)
         {
             _logger = logger;
+        }
+        //
+        [HttpGet("carId={carId}&languageKey={languageKey}")]
+        public string GetDescriptionByLanguageKey(string carId, string languageKey)
+        {
+            // TODO metoda która zwraca samochód po id
+            return "Super!!";
         }
 
         [HttpGet]

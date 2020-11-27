@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    class GivenLanguageHandler : LanguageHandler
+    public class GivenLanguageHandler : LanguageHandler
     {
         private readonly string _key;
 
@@ -12,15 +12,15 @@ namespace LanguageProvider
         {
             _key = key;
         }
-        public override object Handle(Dictionary<string, string> request)
+        public override object Handle(Dictionary<string, string> dictionary)
         {
-            if (request.TryGetValue(this._key, out var value))
+            if (dictionary.TryGetValue(this._key, out var value))
             {
                 return value;
             }
             else
             {
-                return base.Handle(request);
+                return base.Handle(dictionary);
             }
         }
     }

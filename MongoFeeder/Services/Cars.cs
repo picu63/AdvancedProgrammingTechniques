@@ -1,7 +1,7 @@
-﻿using MongoFeeder.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using ClassLibrary.Models;
 
 namespace MongoFeeder.Services
 {
@@ -11,12 +11,12 @@ namespace MongoFeeder.Services
         {
             Car bmw = new Car
             {
-                Mark = "BMW",
+                Brand = "BMW",
                 Model = "e36",
                 ProductionYear = 1998,
                 Languages = new Dictionary<string, string>
                 {
-                    {"PL", "Kupa złomu"},
+                    {"pl_PL", "Kupa złomu"},
                     {"EN", "Piece of shit"},
                     {"DE", "Szmeterling"}
                 }
@@ -24,7 +24,7 @@ namespace MongoFeeder.Services
 
             Car audi = new Car
             {
-                Mark = "Audi",
+                Brand = "Audi",
                 Model = "a4",
                 ProductionYear = 2007,
                 Languages = new Dictionary<string, string>
@@ -37,7 +37,7 @@ namespace MongoFeeder.Services
 
             Car hyundai = new Car
             {
-                Mark = "Hyundai",
+                Brand = "Hyundai",
                 Model = "Coupe",
                 ProductionYear = 2003,
                 Languages = new Dictionary<string, string>
@@ -55,5 +55,4 @@ namespace MongoFeeder.Services
             return cars;
         }
     }
-
 }

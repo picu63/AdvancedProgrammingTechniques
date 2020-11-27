@@ -4,17 +4,17 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    class EnglishLanguageHandler : LanguageHandler
+    public class EnglishLanguageHandler : LanguageHandler
     {
-        public override object Handle(Dictionary<string,string> request)
+        public override object Handle(Dictionary<string,string> dictionary)
         {
-            if (request.TryGetValue("en_EN", out var value))
+            if (dictionary.TryGetValue("en_EN", out var value))
             {
                 return value;
             }
             else
             {
-                return base.Handle(request);
+                return base.Handle(dictionary);
             }
         }
     }

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    abstract class LanguageHandler
+    public abstract class LanguageHandler : IHandler
     {
         private IHandler _nextHandler;
 
@@ -18,9 +18,9 @@ namespace LanguageProvider
             return handler;
         }
 
-        public virtual object Handle(Dictionary<string, string> request)
+        public virtual object Handle(Dictionary<string, string> dictionary)
         {
-            return _nextHandler?.Handle(request);
+            return _nextHandler?.Handle(dictionary);
         }
     }
 }

@@ -4,10 +4,10 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    interface IHandler
+    public interface IHandler
     {
         IHandler SetNext(IHandler handler);
 
-        object Handle(object request);
+        object Handle(Dictionary<string, string> request);
     }
 }
