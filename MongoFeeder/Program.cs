@@ -1,6 +1,5 @@
 ﻿using System;
 using MongoFeeder.Services;
-
 using System.Collections.Generic;
 
 namespace MongoFeeder
@@ -9,8 +8,7 @@ namespace MongoFeeder
     {
         static void Main(string[] args)
         {
-            InsertIntoDatabase.StartProgram();
-            ShowFromDatabase.ShowAllRecords();
+            
         }
     }
 }

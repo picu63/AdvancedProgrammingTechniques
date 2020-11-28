@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarLibrary\CarLibrary.csproj" />
+    <ProjectReference Include="..\MongoFeeder\MongoFeeder.csproj" />
   </ItemGroup>
 
 

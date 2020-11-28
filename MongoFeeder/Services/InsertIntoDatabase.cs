@@ -8,13 +8,14 @@ using ClassLibrary.Models;
 
 namespace MongoFeeder.Services
 {
-    public static class InsertIntoDatabase
+    public class InsertIntoDatabase
     {
-        public static void StartProgram()
+        public void InsertCars(List<Car> list)
         {
             var db = DBConnection.DBConnectionInstance();
             List<Car> cars = Cars.GetCars();
-            db.InsertMany(cars.Select(c => c.ToBsonDocument()));
+            var cars_document = db.GetCollection<BsonDocument>("Cars");
+            cars_document.InsertMany(cars.Select(c => c.ToBsonDocument()));
         }
     }
 

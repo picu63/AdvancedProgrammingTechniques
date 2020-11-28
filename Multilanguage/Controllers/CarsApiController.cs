@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClassLibrary.Models;
+using MongoDB.Bson;
 
 namespace Multilanguage.Controllers
 {
@@ -67,14 +68,17 @@ namespace Multilanguage.Controllers
         [HttpGet("carId={carId}&languageKey={languageKey}")]
         public string GetDescriptionByLanguageKey(string carId, string languageKey)
         {
-            // TODO metoda która zwraca samochód po id
-            return "Super!!";
+            var taker = new MongoFeeder.CarTaker();
+            var car = taker.GetCar(new ObjectId("5fc20f28ac0e29f8b4fc2756"), "Audi");
+            return car.Languages.ToString();
         }
 
         [HttpGet]
         public IEnumerable<Car> Get()
         {
-            return Brands;
+            var taker = new MongoFeeder.CarTaker();
+            var cars = taker.GetCars();
+            return cars;
         }
     }
 }
