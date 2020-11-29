@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ClassLibrary.Models;
+using LanguageProvider;
 using MongoDB.Bson;
 
 namespace Multilanguage.Controllers
@@ -60,17 +61,28 @@ namespace Multilanguage.Controllers
 
         private readonly ILogger<CarsApiController> _logger;
 
+
         public CarsApiController(ILogger<CarsApiController> logger)
         {
             _logger = logger;
         }
         //
         [HttpGet("carId={carId}&languageKey={languageKey}")]
-        public string GetDescriptionByLanguageKey(string carId, string languageKey)
+        public object GetDescriptionByLanguageKey(string carId, string languageKey)
         {
             var taker = new MongoFeeder.CarTaker();
-            var car = taker.GetCar(new ObjectId("5fc20f28ac0e29f8b4fc2756"), "Audi");
-            return car.Languages.ToString();
+            var car = taker.GetCar(new ObjectId(carId), "Audi");
+            var englishLanguage = new EnglishLanguageHandler();
+            var polishLanguage = new PolishLanguageHandler();
+            var anyLanguage = new AnyLanguageHandler();
+            var handler = new GivenLanguageHandler(languageKey)
+                .SetNext(polishLanguage)
+                .SetNext(englishLanguage)
+                .SetNext(anyLanguage);
+
+            var carDescription = (KeyValuePair<string, string>) handler.Handle(car.Languages);
+            car.Languages = new Dictionary<string, string>(new List<KeyValuePair<string, string>>(){carDescription});
+            return car;
         }
 
         [HttpGet]

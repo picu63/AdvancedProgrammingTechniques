@@ -8,9 +8,10 @@ namespace LanguageProvider
     {
         public override object Handle(Dictionary<string,string> dictionary)
         {
-            if (dictionary.TryGetValue("en_EN", out var value))
+            if (dictionary.TryGetValue("en_US", out var value) || dictionary.TryGetValue("en_EN", out value))
             {
-                return value;
+                
+                return new KeyValuePair<string, string>("en_US", value);
             }
             else
             {

@@ -10,7 +10,7 @@ namespace LanguageProvider
         {
             if (dictionary.TryGetValue("pl_PL", out var value))
             {
-                return value;
+                return new KeyValuePair<string, string>("pl_PL", value);
             }
 
             return base.Handle(dictionary);

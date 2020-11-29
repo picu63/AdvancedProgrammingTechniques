@@ -11,7 +11,11 @@ namespace LanguageProvider
         {
             if (dictionary.Any())
             {
-                return dictionary.First().Value;
+                var firstPair = dictionary.FirstOrDefault();
+                var value = firstPair.Value;
+                var key = firstPair.Key;
+                
+                return new KeyValuePair<string, string>(key,value);
             }
             else
             {

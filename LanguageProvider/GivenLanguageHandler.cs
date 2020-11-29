@@ -16,7 +16,7 @@ namespace LanguageProvider
         {
             if (dictionary.TryGetValue(this._key, out var value))
             {
-                return value;
+                return new KeyValuePair<string, string>(_key, value);
             }
             else
             {

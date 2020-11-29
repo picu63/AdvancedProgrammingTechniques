@@ -16,9 +16,8 @@ namespace MongoFeeder
             var cars_document = Cars.GetCars();
             inserter.InsertCars(cars_document);
             var getter = new DataBaseTaker();
-            var cars = getter.GerRecordByKeyAndId(id, key);
-            var myCar = cars.First();
-            return myCar;
+            var car = getter.GerCarById(id);
+            return car;
         }
 
         public IEnumerable<Car> GetCars()
@@ -27,7 +26,7 @@ namespace MongoFeeder
             var cars_document = Cars.GetCars();
             inserter.InsertCars(cars_document);
             var getter = new DataBaseTaker();
-            var cars = getter.GetAllRecord();
+            var cars = getter.GetAllCars();
             return cars;
         }
     }
