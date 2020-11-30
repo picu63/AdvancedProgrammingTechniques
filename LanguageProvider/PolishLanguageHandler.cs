@@ -4,16 +4,16 @@ using System.Globalization;
 
 namespace LanguageProvider
 {
-    public class PolishLanguageHandler : LanguageHandler
+    public class PolishLanguageHandler : AbstractLanguageHandler
     {
-        public override object Handle(Dictionary<string, string> dictionary)
+        public override KeyValueNullable<string, string> Handle(Dictionary<string, string> dictionary, string key)
         {
             if (dictionary.TryGetValue("pl_PL", out var value))
             {
-                return new KeyValuePair<string, string>("pl_PL", value);
+                return new KeyValueNullable<string, string>("pl_PL", value);
             }
 
-            return base.Handle(dictionary);
+            return base.Handle(dictionary, key);
         }
     }
 }

@@ -4,19 +4,17 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    public class EnglishLanguageHandler : LanguageHandler
+    public class EnglishLanguageHandler : AbstractLanguageHandler
     {
-        public override object Handle(Dictionary<string,string> dictionary)
+        public override KeyValueNullable<string, string> Handle(Dictionary<string, string> dictionary, string key)
         {
-            if (dictionary.TryGetValue("en_US", out var value) || dictionary.TryGetValue("en_EN", out value))
+            if (dictionary.TryGetValue("en_US", out var value))
             {
                 
-                return new KeyValuePair<string, string>("en_US", value);
+                return new KeyValueNullable<string, string>("en_US", value);
             }
-            else
-            {
-                return base.Handle(dictionary);
-            }
+
+            return base.Handle(dictionary, key);
         }
     }
 }

@@ -8,15 +8,24 @@ namespace LanguageTest
     {
         static void Main(string[] args)
         {
-            EnglishLanguageHandler englishLanguageHandler = new EnglishLanguageHandler();
-            PolishLanguageHandler polishLanguageHandler = new PolishLanguageHandler();
-            AnyLanguageHandler anyLanguageHandler = new AnyLanguageHandler();
-            var givenLanguageHandler = new GivenLanguageHandler("klucz")
+            var givenLanguageHandler = new GivenLanguageHandler();
+            var englishLanguageHandler = new EnglishLanguageHandler();
+            var polishLanguageHandler = new PolishLanguageHandler();
+            var anyLanguageHandler = new AnyLanguageHandler();
+            givenLanguageHandler
                 .SetNext(englishLanguageHandler)
                 .SetNext(polishLanguageHandler)
                 .SetNext(anyLanguageHandler);
 
-            givenLanguageHandler.Handle(new Dictionary<string, string>());
+            var dictionary = new Dictionary<string, string>()
+                {{"ens_US", "Napis po angielsku"}, {"cn_CN", "Napis po chińsku"}};
+            const string searchKey = "cnd_CN";
+            Console.WriteLine(dictionary);
+            Console.WriteLine($"Poszukiwany klucz: {searchKey}");
+            var result = givenLanguageHandler.Handle(dictionary, searchKey);
+            Console.WriteLine($"Key: {result.Key}");
+            Console.WriteLine($"Value: {result.Value}");
+            Console.ReadKey();
         }
     }
 }

@@ -5,21 +5,20 @@ using System.Text;
 
 namespace LanguageProvider
 {
-    public class AnyLanguageHandler : LanguageHandler
+    public class AnyLanguageHandler : AbstractLanguageHandler
     {
-        public override object Handle(Dictionary<string, string> dictionary)
+        public override KeyValueNullable<string, string> Handle(Dictionary<string, string> dictionary, string key)
         {
             if (dictionary.Any())
             {
                 var firstPair = dictionary.FirstOrDefault();
                 var value = firstPair.Value;
-                var key = firstPair.Key;
-                
-                return new KeyValuePair<string, string>(key,value);
+                var firstKey = firstPair.Key;
+                return new KeyValueNullable<string, string>(firstKey,value);
             }
             else
             {
-                return null;
+                return base.Handle(dictionary, key);
             }
         }
     }
