@@ -8,12 +8,7 @@ namespace LanguageProvider
     {
         public override KeyValueNullable<string, string> Handle(Dictionary<string, string> dictionary, string key)
         {
-            if (dictionary.TryGetValue("pl_PL", out var value))
-            {
-                return new KeyValueNullable<string, string>("pl_PL", value);
-            }
-
-            return base.Handle(dictionary, key);
+            return dictionary.TryGetValue("pl_PL", out var value) ? new KeyValueNullable<string, string>("pl_PL", value) : base.Handle(dictionary, key);
         }
     }
 }

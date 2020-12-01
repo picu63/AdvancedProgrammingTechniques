@@ -16,10 +16,8 @@ namespace LanguageProvider
                 var firstKey = firstPair.Key;
                 return new KeyValueNullable<string, string>(firstKey,value);
             }
-            else
-            {
-                return base.Handle(dictionary, key);
-            }
+
+            return base.Handle(dictionary, key);
         }
     }
 }

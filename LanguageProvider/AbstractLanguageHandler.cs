@@ -16,14 +16,7 @@ namespace LanguageProvider
 
         public virtual KeyValueNullable<string, string> Handle(Dictionary<string, string> dictionary, string key)
         {
-            if (_nextLanguageHandler != null)
-            {
-                return _nextLanguageHandler.Handle(dictionary, key);
-            }
-            else
-            {
-                return null;
-            }
+            return _nextLanguageHandler?.Handle(dictionary, key);
         }
     }
 }
