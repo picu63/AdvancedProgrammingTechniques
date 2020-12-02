@@ -4,14 +4,15 @@ using System.Drawing;
 using System.Text;
 using System.Device.Location;
 using System.Linq;
+using EnduroLibrary;
 
 namespace EnduroCalculator.Interfaces
 {
-    interface IDistanceCalculator
+    public interface IDistanceCalculator
     {
-        double GetTotalDistance(IEnumerable<GeoCoordinate> coordinates);
-        double GetClimbingDistance(IOrderedEnumerable<GeoCoordinate> coordinates);
-        double GetDescentDistance(IOrderedEnumerable<GeoCoordinate> coordinates);
-        double GetFlatDistance(IOrderedEnumerable<GeoCoordinate> coordinates, double range);
+        double GetTotalDistance(IEnumerable<TrackPoint> coordinates);
+        double GetClimbingDistance(IEnumerable<TrackPoint> coordinates);
+        double GetDescentDistance(IEnumerable<TrackPoint> coordinates);
+        double GetFlatDistance(IEnumerable<TrackPoint> coordinates, double range);
     }
 }
