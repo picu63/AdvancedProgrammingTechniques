@@ -22,7 +22,7 @@ namespace EnduroTrailsAnalyzer
             var trackPoints = trackReader.GetAllPoints();
             IDistanceCalculator distanceCalculator;
             ISpeedCalculator speedCalculator;
-            IElevationCalculator elevationCalculator;
+            ITimeCalculator elevationCalculator;
             ITimeCalculator timeCalculator;
         }
     }
