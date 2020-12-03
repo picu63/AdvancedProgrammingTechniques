@@ -11,7 +11,6 @@ namespace EnduroLibrary
         public double Longitude { get; set; }
         public DateTime DateTime { get; set; }
         public double Altitude { get; set; }
-
-        public GeoCoordinate GetGeoCoordinate() => new GeoCoordinate(this.Latitude, Longitude, Altitude);
+        public GeoCoordinate GetGeoCoordinate() => new GeoCoordinate(Latitude, Longitude, Altitude);
     }
 }
