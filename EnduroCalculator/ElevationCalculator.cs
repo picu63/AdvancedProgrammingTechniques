@@ -37,7 +37,7 @@ namespace EnduroCalculator
             return (avg);
         }
 
-        public double GetTotalClimbing(IEnumerable<TrackPoint> coordinates, double range)
+        public double GetTotalClimbing(IEnumerable<TrackPoint> coordinates)
         {
             throw new NotImplementedException();
         }
