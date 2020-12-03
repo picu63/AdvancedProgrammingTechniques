@@ -20,6 +20,7 @@ namespace EnduroTrailsAnalyzer
 
             var trackReader = new TrackReader(filePath);
             var trackPoints = trackReader.GetAllPoints();
+        
             IDistanceCalculator distanceCalculator;
             ISpeedCalculator speedCalculator;
             ITimeCalculator elevationCalculator;

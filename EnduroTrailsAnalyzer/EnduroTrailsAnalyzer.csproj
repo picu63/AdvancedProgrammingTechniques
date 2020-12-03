@@ -10,4 +10,10 @@
     <ProjectReference Include="..\EnduroTrackReader\EnduroTrackReader.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="TestFiles\Twister.gpx">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
