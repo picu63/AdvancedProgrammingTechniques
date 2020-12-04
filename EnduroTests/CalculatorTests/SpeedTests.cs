@@ -47,7 +47,7 @@ namespace EnduroTests.CalculatorTests
             {
                 foreach (var trackPoint in track)
                 {
-                    Console.Write(trackPoint.Altitude + ',');
+                    Console.Write(trackPoint.Altitude + ",");
                 }
 
                 Console.WriteLine();

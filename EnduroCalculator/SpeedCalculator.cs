@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.IO;
+using MoreLinq;
 using System.Linq;
 using System.Text;
 using EnduroCalculator.Interfaces;
@@ -66,31 +67,34 @@ namespace EnduroCalculator
         {
             var climbingTracks = new List<List<TrackPoint>>();
             var tp = trackPoints.ToList();
-            TrackPoint current;
-            TrackPoint next;
+            TrackPoint right;
+            TrackPoint left;
             var currentTrackPoints = new List<TrackPoint>();
             //// 1, 3, 5, 4, 5                1, 3, 3, 5
-            for (int i = 0; i < tp.Count - 1; i++)
+            for (int i = 1; i < tp.Count; i++)
             {
-                current = tp[i];
-                next = tp[i + 1];
-                var nextIndex = i + 1;
-                if (nextIndex == tp.Count - 1)
+                right = tp[i];
+                left = tp[i - 1];
+                if (right.Altitude > left.Altitude)
                 {
-                    
-                }
-                if (current.Altitude < next.Altitude)
-                {
-                    currentTrackPoints.Add(current);
-                    currentTrackPoints.Add(next);
+                    currentTrackPoints.Add(left);
+                    currentTrackPoints.Add(right);
                 }
                 else
                 {
+                    if (currentTrackPoints.Count > 0) { 
                     climbingTracks.Add(currentTrackPoints);
                     currentTrackPoints = new List<TrackPoint>();
+                    }
                 }
             }
+            if (currentTrackPoints.Count > 0)
+            {
+                climbingTracks.Add(currentTrackPoints);
+            }
             climbingTracks.Select((track => track.Distinct()));
+
+            return climbingTracks;
             //var climbingTrack = new List<TrackPoint>();
             //var tracksQueue = new Queue<TrackPoint>(trackPoints);
 
