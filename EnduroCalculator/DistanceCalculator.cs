@@ -13,24 +13,22 @@ namespace EnduroCalculator
         {
             var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
 
-            double initDistance = 0;
+            double totalDistance = 0;
             while (true)
             {
-                //Weź pierwsze 2 z listy,
-                //Sprawdź czy drugi jest nullem jeśli jest to zwróć dystans
-                //następnie zmierz dystans pomiędzy nimi
-                //i dodaj go do 
                 var first = geoCoordinates.FirstOrDefault();
                 var second = geoCoordinates.Skip(1).FirstOrDefault();
                 if (second is null)
                 {
-                    return initDistance;
+                    break;
                 }
 
-                var distance = initDistance + first.GetDistanceTo(second);
+                var distance = totalDistance + first.GetDistanceTo(second);
                 geoCoordinates = geoCoordinates.Skip(1);
-                initDistance = distance;
+                totalDistance = distance;
             }
+
+            return totalDistance;
         }
 
         public double GetClimbingDistance(IEnumerable<TrackPoint> coordinates)
@@ -47,9 +45,9 @@ namespace EnduroCalculator
                     var second = geoCoordinates.Skip(1).FirstOrDefault(); 
                     if (second is null) 
                     { 
-                        return climbingDistance;
+                        break;
                     }
-                    climbingDistance = first.GetDistanceTo(second);
+                    climbingDistance += first.GetDistanceTo(second);
                     geoCoordinates = geoCoordinates.Skip(1);
                 }
             }
@@ -70,9 +68,9 @@ namespace EnduroCalculator
                     var second = geoCoordinates.Skip(1).FirstOrDefault();
                     if (second is null)
                     {
-                        return descentDistance;
+                        break;
                     }
-                    descentDistance = first.GetDistanceTo(second);
+                    descentDistance += first.GetDistanceTo(second);
                     geoCoordinates = geoCoordinates.Skip(1);
                 }
             }

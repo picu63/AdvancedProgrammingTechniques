@@ -7,11 +7,11 @@ namespace EnduroCalculator.Interfaces
 {
     public interface IElevationCalculator
     {
-        double GetMinimumElevation(IEnumerable<TrackPoint> coordinates);
-        double GetMaximumElevation(IEnumerable<TrackPoint> coordinates);
-        double GetAverageElevation(IEnumerable<TrackPoint> coordinates);
-        double GetTotalClimbing(IEnumerable<TrackPoint> coordinates);
-        double GetTotalDescent(IEnumerable<TrackPoint> coordinates);
-        double GetFinalBalance(IEnumerable<TrackPoint> coordinates);
+        double GetMinimumElevation(IEnumerable<TrackPoint> trackPoints);
+        double GetMaximumElevation(IEnumerable<TrackPoint> trackPoints);
+        double GetAverageElevation(IEnumerable<TrackPoint> trackPoints);
+        double GetTotalClimbing(IEnumerable<TrackPoint> trackPoints);
+        double GetTotalDescent(IEnumerable<TrackPoint> trackPoints);
+        double GetFinalBalance(IEnumerable<TrackPoint> trackPoints);
     }
 }

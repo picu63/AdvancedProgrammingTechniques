@@ -12,6 +12,6 @@ namespace EnduroCalculator.Interfaces
         double GetAverageSpeed(IEnumerable<TrackPoint> trackPoints);
         double GetAverageClimbingSpeed(IEnumerable<TrackPoint> trackPoints);
         double GetAverageDescentSpeed(IEnumerable<TrackPoint> trackPoints);
-        double GetAverageFlatSpeed(IEnumerable<TrackPoint> trackPoints);
+        double GetAverageFlatSpeed(IEnumerable<TrackPoint> trackPoints, double range);
     }
 }

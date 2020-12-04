@@ -35,12 +35,12 @@ namespace EnduroCalculator
         public double GetAverageClimbingSpeed(IEnumerable<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
-            var climbingTrackPoints = trackCalculator.GetClimbingTracks(trackPoints);
+            var climbingTracks = trackCalculator.GetClimbingTracks(trackPoints);
             var averageClimbSpeedList = new List<double>();
-            foreach (var climbingTrackPointList in climbingTrackPoints)
+            foreach (var climbingTrack in climbingTracks)
             {
-                var averageClimbSpeed = GetAverageSpeed(climbingTrackPointList);
-                averageClimbSpeedList.Add(averageClimbSpeed);
+                var averageClimbSpeed = GetAverageSpeed(climbingTrack);
+                averageClimbSpeedList.Add(averageClimbSpeed*climbingTrack.Count);
             }
 
             return averageClimbSpeedList.Average();
@@ -48,12 +48,30 @@ namespace EnduroCalculator
 
         public double GetAverageDescentSpeed(IEnumerable<TrackPoint> trackPoints)
         {
-            throw new NotImplementedException();
+            var trackCalculator = new TrackCalculator();
+            var descentTracks = trackCalculator.GetClimbingTracks(trackPoints);
+            var averageDescentSpeedList = new List<double>();
+            foreach (var descentTrack in descentTracks)
+            {
+                var averageDescentSpeed = GetAverageSpeed(descentTrack);
+                averageDescentSpeedList.Add(averageDescentSpeed * descentTrack.Count);
+            }
+
+            return averageDescentSpeedList.Average();
         }
 
-        public double GetAverageFlatSpeed(IEnumerable<TrackPoint> trackPoints)
+        public double GetAverageFlatSpeed(IEnumerable<TrackPoint> trackPoints, double range)
         {
-            throw new NotImplementedException();
+            var trackCalculator = new TrackCalculator();
+            var flatTracks = trackCalculator.GetFlatTracks(trackPoints, range);
+            var averageFlatSpeedList = new List<double>();
+            foreach (var flatTrack in flatTracks)
+            {
+                var averageFlatSpeed = GetAverageSpeed(flatTrack);
+                averageFlatSpeedList.Add(averageFlatSpeed*flatTrack.Count);
+            }
+
+            return averageFlatSpeedList.Average();
         }
     }
 }
