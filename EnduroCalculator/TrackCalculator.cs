@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using EnduroCalculator.Interfaces;
 using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class TrackCalculator
+    public class TrackCalculator : ITrackCalculator
     {
         public IEnumerable<List<TrackPoint>> GetClimbingTracks(IEnumerable<TrackPoint> trackPoints)
         {
@@ -84,6 +85,16 @@ namespace EnduroCalculator
             var timeSpan = endPoint.DateTime - startPoint.DateTime;
             var timeInSeconds = timeSpan.TotalSeconds;
             return distance / timeInSeconds;
+        }
+
+        public IEnumerable<List<TrackPoint>> GetDescentTracks(IEnumerable<TrackPoint> trackPoints)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<List<TrackPoint>> GetFlatTracks(IEnumerable<TrackPoint> trackPoints, double range)
+        {
+            throw new NotImplementedException();
         }
     }
 }

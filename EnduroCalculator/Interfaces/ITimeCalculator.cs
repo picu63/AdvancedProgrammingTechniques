@@ -10,6 +10,6 @@ namespace EnduroCalculator.Interfaces
         double GetTotalTrackTime(IEnumerable<TrackPoint> coordinates);
         double GetClimbingTime(IEnumerable<TrackPoint> coordinates);
         double GetDescentTime(IEnumerable<TrackPoint> coordinates);
-        double GetFlatTime(IEnumerable<TrackPoint> coordinates);
+        double GetFlatTime(IEnumerable<TrackPoint> coordinates, double range);
     }
 }
