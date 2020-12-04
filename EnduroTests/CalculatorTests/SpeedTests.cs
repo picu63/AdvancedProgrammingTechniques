@@ -41,8 +41,8 @@ namespace EnduroTests.CalculatorTests
         [Test]
         public void GetClimbingAverageSpeed()
         {
-            SpeedCalculator speedCalculator = new SpeedCalculator();
-            var tracks = speedCalculator.GetClimbingTracks(this.trackPoints);
+            var trackCalculator = new TrackCalculator();
+            var tracks = trackCalculator.GetClimbingTracks(this.trackPoints);
             foreach (var track in tracks)
             {
                 foreach (var trackPoint in track)
