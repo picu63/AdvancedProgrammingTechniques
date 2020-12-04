@@ -9,11 +9,6 @@ namespace EnduroCalculator
 {
     public class TimeCalculator : ITimeCalculator
     {
-        public double GetAverageElevation(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
         public double GetClimbingTime(IEnumerable<TrackPoint> coordinates)
         {
             throw new NotImplementedException();
@@ -24,32 +19,7 @@ namespace EnduroCalculator
             throw new NotImplementedException();
         }
 
-        public double GetFinalBalance(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
         public double GetFlatTime(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetMaximumElevation(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetMinimumElevation(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetTotalClimbing(IEnumerable<TrackPoint> coordinates)
-        {
-            throw new NotImplementedException();
-        }
-
-        public double GetTotalDescent(IEnumerable<TrackPoint> coordinates)
         {
             throw new NotImplementedException();
         }
