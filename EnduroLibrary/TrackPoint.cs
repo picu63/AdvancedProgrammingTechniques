@@ -12,5 +12,9 @@ namespace EnduroLibrary
         public DateTime DateTime { get; set; }
         public double Altitude { get; set; }
         public GeoCoordinate GetGeoCoordinate() => new GeoCoordinate(Latitude, Longitude, Altitude);
+        public override string ToString()
+        {
+            return $"LA:{Latitude}, LO:{Longitude}, A:{Altitude}, T:{DateTime.ToShortTimeString()}";
+        }
     }
 }

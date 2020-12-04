@@ -25,13 +25,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LanguageTest", "LanguageTes
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Zad03Enduro", "Zad03Enduro", "{CC84876B-C5AE-4932-921E-A499A5C4ED70}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroTrailsAnalyzer", "EnduroTrailsAnalyzer\EnduroTrailsAnalyzer.csproj", "{1FFF618D-FFA0-4296-9E7B-044521C5FC67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroTrailsAnalyzer", "EnduroTrailsAnalyzer\EnduroTrailsAnalyzer.csproj", "{1FFF618D-FFA0-4296-9E7B-044521C5FC67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroCalculator", "EnduroCalculator\EnduroCalculator.csproj", "{BFB0BDD8-A086-4392-B9B5-F3D2BB604700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroCalculator", "EnduroCalculator\EnduroCalculator.csproj", "{BFB0BDD8-A086-4392-B9B5-F3D2BB604700}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroLibrary", "EnduroLibrary\EnduroLibrary.csproj", "{0EF0B17E-2B49-48DC-A880-456CF20CEE35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroLibrary", "EnduroLibrary\EnduroLibrary.csproj", "{0EF0B17E-2B49-48DC-A880-456CF20CEE35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroTrackReader", "EnduroTrackReader\EnduroTrackReader.csproj", "{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroTrackReader", "EnduroTrackReader\EnduroTrackReader.csproj", "{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroTests", "EnduroTests\EnduroTests.csproj", "{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,6 +89,10 @@ Global
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{BFB0BDD8-A086-4392-B9B5-F3D2BB604700} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 		{0EF0B17E-2B49-48DC-A880-456CF20CEE35} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
+		{AEC2A47F-A02D-4FCF-8A8B-78B991E86CE2} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC1FE6C0-B4E8-421D-A69F-771725B9AC96}

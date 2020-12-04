@@ -51,8 +51,8 @@ namespace EnduroCalculator
 
         public double GetAverageClimbingSpeed(IEnumerable<TrackPoint> trackPoints)
         {
-            var climbingTrackPoints = GetClimbingTrackPoints(trackPoints);
-            List<double> averageClimbSpeedList = new List<double>();
+            var climbingTrackPoints = GetClimbingTracks(trackPoints);
+            var averageClimbSpeedList = new List<double>();
             foreach (var climbingTrackPointList in climbingTrackPoints)
             {
                 var averageClimbSpeed = GetAverageSpeed(climbingTrackPointList);
@@ -62,36 +62,59 @@ namespace EnduroCalculator
             return averageClimbSpeedList.Average();
         }
 
-        private IEnumerable<List<TrackPoint>> GetClimbingTrackPoints(IEnumerable<TrackPoint> trackPoints)
+        public IEnumerable<List<TrackPoint>> GetClimbingTracks(IEnumerable<TrackPoint> trackPoints)
         {
-            var trackPointsList = trackPoints.ToList();
-            var climbTrackPoints = new List<TrackPoint>();
-            Queue<TrackPoint> tracksQueue = new Queue<TrackPoint>(trackPoints);
-            // 1, 3, 2, 4
-            while (true)
+            var climbingTracks = new List<List<TrackPoint>>();
+            var tp = trackPoints.ToList();
+            TrackPoint current;
+            TrackPoint next;
+            var currentTrackPoints = new List<TrackPoint>();
+            //// 1, 3, 5, 4, 5                1, 3, 3, 5
+            for (int i = 0; i < tp.Count - 1; i++)
             {
-                var tp = tracksQueue.Dequeue();
-                var tpNext = tracksQueue.Peek();
-                if (tp.Altitude - tpNext.Altitude > 0)
+                current = tp[i];
+                next = tp[i + 1];
+                var nextIndex = i + 1;
+                if (nextIndex == tp.Count - 1)
                 {
-                    continue;
+                    
                 }
-            }
-
-            for (int i = 0; i < trackPointsList.Count - 1; i++)
-            {
-                var tpCurrent = trackPointsList[i];
-                var tpNext = trackPointsList[i + 1];
-                if (tpCurrent.Altitude - tpNext.Altitude > 0)
+                if (current.Altitude < next.Altitude)
                 {
-                    yield return climbTrackPoints;
-                    climbTrackPoints = new List<TrackPoint>();
+                    currentTrackPoints.Add(current);
+                    currentTrackPoints.Add(next);
                 }
                 else
                 {
-                    climbTrackPoints.Add(tpNext);
+                    climbingTracks.Add(currentTrackPoints);
+                    currentTrackPoints = new List<TrackPoint>();
                 }
             }
+            climbingTracks.Select((track => track.Distinct()));
+            //var climbingTrack = new List<TrackPoint>();
+            //var tracksQueue = new Queue<TrackPoint>(trackPoints);
+
+            //while (true)
+            //{
+            //    var tp = tracksQueue.Dequeue();
+            //    var tpNext = tracksQueue.Peek();
+            //    if (tpNext is null)
+            //    {
+            //        return climbingTracks;
+            //    }
+            //    if (tp.Altitude < tpNext.Altitude)
+            //    {
+            //        climbingTrack.Add(tp);
+            //    }
+            //    else
+            //    {
+            //        if (climbingTrack.Count >= 2)
+            //        {
+            //            climbingTracks.Add(climbingTrack);
+            //        }
+            //        climbingTrack = new List<TrackPoint>();
+            //    }
+            //}
         }
 
         public double GetAverageDescentSpeed(IEnumerable<TrackPoint> trackPoints)
