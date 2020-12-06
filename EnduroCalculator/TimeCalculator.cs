@@ -9,7 +9,7 @@ namespace EnduroCalculator
 {
     public class TimeCalculator : ITimeCalculator
     {
-        public double GetClimbingTime(IEnumerable<TrackPoint> trackPoints)
+        public double GetClimbingTime(ICollection<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
             var climbigTracks = trackCalculator.GetClimbingSections(trackPoints);
@@ -27,7 +27,7 @@ namespace EnduroCalculator
             return total.TotalSeconds;
         }
 
-        public double GetDescentTime(IEnumerable<TrackPoint> trackPoints)
+        public double GetDescentTime(ICollection<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
             var descentTracks = trackCalculator.GetDescentSections(trackPoints);
@@ -45,7 +45,7 @@ namespace EnduroCalculator
             return total.TotalSeconds;
         }
 
-        public double GetFlatTime(IEnumerable<TrackPoint> trackPoints, double range)
+        public double GetFlatTime(ICollection<TrackPoint> trackPoints, double range)
         {
             var trackCalculator = new TrackCalculator();
             var flatTracks = trackCalculator.GetFlatSections(trackPoints,range);
@@ -63,7 +63,7 @@ namespace EnduroCalculator
 
         }
 
-        public double GetTotalTrackTime(IEnumerable<TrackPoint> trackPoints)
+        public double GetTotalTrackTime(ICollection<TrackPoint> trackPoints)
         {
             var times = trackPoints.Select((tt) => tt.DateTime);
             var minTime = times.Min();

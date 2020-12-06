@@ -10,7 +10,7 @@ namespace EnduroCalculator
     public class ElevationCalculator : IElevationCalculator
     {
 
-        public double GetMinimumElevation(IEnumerable<TrackPoint> trackPoints)
+        public double GetMinimumElevation(ICollection<TrackPoint> trackPoints)
         {
             var geoCoordinates = trackPoints.Select((t) => t.Altitude);
 
@@ -18,7 +18,7 @@ namespace EnduroCalculator
             return (min);
         }
 
-        public double GetMaximumElevation(IEnumerable<TrackPoint> trackPoints)
+        public double GetMaximumElevation(ICollection<TrackPoint> trackPoints)
         {
             var geoCoordinates = trackPoints.Select((t) => t.Altitude);
 
@@ -26,7 +26,7 @@ namespace EnduroCalculator
             return (max);
         }
 
-        public double GetAverageElevation(IEnumerable<TrackPoint> trackPoints)
+        public double GetAverageElevation(ICollection<TrackPoint> trackPoints)
         {
             var geoCoordinates = trackPoints.Select((t) => t.Altitude);
 
@@ -34,7 +34,7 @@ namespace EnduroCalculator
             return (avg);
         }
 
-        public double GetTotalClimbing(IEnumerable<TrackPoint> trackPoints)
+        public double GetTotalClimbing(ICollection<TrackPoint> trackPoints)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
             var climbingTracks = trackCalculator.GetClimbingSections(trackPoints);
@@ -51,7 +51,7 @@ namespace EnduroCalculator
             return total;
         }
 
-        public double GetTotalDescent(IEnumerable<TrackPoint> trackPoints)
+        public double GetTotalDescent(ICollection<TrackPoint> trackPoints)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
             var descentTracks = trackCalculator.GetDescentSections(trackPoints);
@@ -69,7 +69,7 @@ namespace EnduroCalculator
 
         }
 
-        public double GetFinalBalance(IEnumerable<TrackPoint> trackPoints)
+        public double GetFinalBalance(ICollection<TrackPoint> trackPoints)
         {
             var geoCoordinates = trackPoints.Select((t) => t.Altitude);
 

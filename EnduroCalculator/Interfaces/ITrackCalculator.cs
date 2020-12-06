@@ -7,9 +7,10 @@ namespace EnduroCalculator.Interfaces
 {
     public interface ITrackCalculator
     {
-        IEnumerable<List<TrackPoint>> GetClimbingSections(IEnumerable<TrackPoint> trackPoints);
-        IEnumerable<List<TrackPoint>> GetDescentSections(IEnumerable<TrackPoint> trackPoints);
-        IEnumerable<List<TrackPoint>> GetFlatSections(IEnumerable<TrackPoint> trackPoints, double range);
+        List<Track> GetDrives(ICollection<TrackPoint> trackPoints);
+        ICollection<List<TrackPoint>> GetClimbingSections(ICollection<TrackPoint> trackPoints, double range);
+        ICollection<List<TrackPoint>> GetDescentSections(ICollection<TrackPoint> trackPoints, double range);
+        ICollection<List<TrackPoint>> GetFlatSections(ICollection<TrackPoint> trackPoints, double range);
         IEnumerable<double> GetAllVelocities(IEnumerable<TrackPoint> trackPoints);
         double GetVelocity(TrackPoint startPoint, TrackPoint endPoint);
     }

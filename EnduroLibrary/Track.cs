@@ -6,8 +6,8 @@ namespace EnduroLibrary
 {
     public class Track
     {
-
+        public int Id { get; set; }
         public string Name { get; set; }
-        public IEnumerable<TrackPoint> TrackPoints { get; set; }
+        public ICollection<TrackPoint> TrackPoints { get; set; }
     }
 }

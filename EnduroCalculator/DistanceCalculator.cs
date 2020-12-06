@@ -9,7 +9,7 @@ namespace EnduroCalculator
 {
     public class DistanceCalculator : IDistanceCalculator
     {
-        public double GetTotalDistance(IEnumerable<TrackPoint> coordinates)
+        public double GetTotalDistance(ICollection<TrackPoint> coordinates)
         {
             var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
 
@@ -31,14 +31,14 @@ namespace EnduroCalculator
             return totalDistance;
         }
 
-        public double GetClimbingDistance(IEnumerable<TrackPoint> coordinates)
+        public double GetClimbingDistance(ICollection<TrackPoint> coordinates)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
             var climbingSections = trackCalculator.GetClimbingSections(coordinates);
             double climbingDistance = 0;
             foreach(var section in climbingSections)
             {
-                var geoCoordinates = coordinates.Select((t) => t.GetGeoCoordinate());
+                var geoCoordinates = section.Select((t) => t.GetGeoCoordinate());
                 while (true)
                 {
                     var first = geoCoordinates.FirstOrDefault();
@@ -54,14 +54,14 @@ namespace EnduroCalculator
             return climbingDistance;
         }
 
-        public double GetDescentDistance(IEnumerable<TrackPoint> coordinates)
+        public double GetDescentDistance(ICollection<TrackPoint> coordinates)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetClimbingSections(coordinates);
+            var descentTracks = trackCalculator.GetDescentSections(coordinates);
             double descentDistance = 0;
-            foreach (var track in descentTracks)
+            foreach (var section in descentTracks)
             {
-                var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
+                var geoCoordinates = section.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
                 while (true)
                 {
                     var first = geoCoordinates.FirstOrDefault();
@@ -77,14 +77,14 @@ namespace EnduroCalculator
             return descentDistance;
         }
 
-        public double GetFlatDistance(IEnumerable<TrackPoint> coordinates, double range)
+        public double GetFlatDistance(ICollection<TrackPoint> coordinates, double range = 0.05)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetClimbingSections(coordinates);
+            var flatTracks = trackCalculator.GetFlatSections(coordinates, range);
             double flatDistance = 0;
-            foreach (var track in flatTracks)
+            foreach (var section in flatTracks)
             {
-                var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
+                var geoCoordinates = section.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
                 while (true)
                 {
                     var first = geoCoordinates.FirstOrDefault();

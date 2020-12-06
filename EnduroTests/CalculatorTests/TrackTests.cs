@@ -42,6 +42,30 @@ namespace EnduroTests.CalculatorTests
             //Assert.That(tracks.Count() == 3);
         }
 
+        [Test]
+        public void GetAnySectionsDescent()
+        {
+            TrackCalculator trackCalculator = new TrackCalculator();
+            var range = 1.4;
+            var tracks = trackCalculator.GetSections(this.trackPoints, (previous, current) =>
+            {
+                return current.Altitude < previous.Altitude - range;
+            }).ToList();
+            PrintTracks(tracks);
+        }
+
+        [Test]
+        public void GetAnySectionsFlat()
+        {
+            TrackCalculator trackCalculator = new TrackCalculator();
+            var range = 1.4;
+            var tracks = trackCalculator.GetSections(this.trackPoints, (previous, current) =>
+            {
+                return Math.Abs(current.Altitude - previous.Altitude) <= range;
+            }).ToList();
+            PrintTracks(tracks);
+        }
+
         private static void PrintTracks(List<List<TrackPoint>> tracks)
         {
             for (int i = 0; i < tracks.Count(); i++)

@@ -7,9 +7,9 @@ namespace EnduroCalculator.Interfaces
 {
     public interface ITimeCalculator
     {
-        double GetTotalTrackTime(IEnumerable<TrackPoint> coordinates);
-        double GetClimbingTime(IEnumerable<TrackPoint> coordinates);
-        double GetDescentTime(IEnumerable<TrackPoint> coordinates);
-        double GetFlatTime(IEnumerable<TrackPoint> coordinates, double range);
+        double GetTotalTrackTime(ICollection<TrackPoint> coordinates);
+        double GetClimbingTime(ICollection<TrackPoint> coordinates);
+        double GetDescentTime(ICollection<TrackPoint> coordinates);
+        double GetFlatTime(ICollection<TrackPoint> coordinates, double range);
     }
 }
