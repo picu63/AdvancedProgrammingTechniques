@@ -26,33 +26,33 @@ namespace EnduroTrailsAnalyzer
             IElevationCalculator elevationCalculator = new ElevationCalculator();
             ITimeCalculator timeCalculator = new TimeCalculator();
 
-            Console.WriteLine("Distance");
-            Console.WriteLine($"Total: {distanceCalculator.GetTotalDistance(trackPoints)}");
-            Console.WriteLine($"Climbing: {distanceCalculator.GetClimbingDistance(trackPoints)}");
-            Console.WriteLine($"Descent: {distanceCalculator.GetDescentDistance(trackPoints)}");
-            Console.WriteLine($"Flat: {distanceCalculator.GetFlatDistance(trackPoints, 0.05)}");
+            Console.WriteLine("\nDistance");
+            Console.WriteLine($"Total: {distanceCalculator.GetTotalDistance(trackPoints):0.##} m");
+            Console.WriteLine($"Climbing: {distanceCalculator.GetClimbingDistance(trackPoints):0.##} m");
+            Console.WriteLine($"Descent: {distanceCalculator.GetDescentDistance(trackPoints):0.##} m");
+            Console.WriteLine($"Flat: {distanceCalculator.GetFlatDistance(trackPoints):0.##} m");
 
-            Console.WriteLine("Speed");
-            Console.WriteLine($"Minimum: {speedCalculator.GetMinimumSpeed(trackPoints)}");
-            Console.WriteLine($"Maximum: {speedCalculator.GetMaximumSpeed(trackPoints)}");
-            Console.WriteLine($"Average: {speedCalculator.GetAverageSpeed(trackPoints)}");
-            Console.WriteLine($"Average climbing: {speedCalculator.GetAverageClimbingSpeed(trackPoints)}");
-            Console.WriteLine($"Average descent: {speedCalculator.GetAverageDescentSpeed(trackPoints)}");
-            Console.WriteLine($"Average flat: {speedCalculator.GetAverageFlatSpeed(trackPoints, 0.05)}");
+            Console.WriteLine("\nSpeed");
+            Console.WriteLine($"Minimum: {speedCalculator.GetMinimumSpeed(trackPoints):0.####} m/s");
+            Console.WriteLine($"Maximum: {speedCalculator.GetMaximumSpeed(trackPoints):0.##} m/s");
+            Console.WriteLine($"Average: {speedCalculator.GetAverageSpeed(trackPoints):0.##} m/s");
+            Console.WriteLine($"Average climbing: {speedCalculator.GetAverageClimbingSpeed(trackPoints):0.##} m/s");
+            Console.WriteLine($"Average descent: {speedCalculator.GetAverageDescentSpeed(trackPoints):0.##} m/s");
+            Console.WriteLine($"Average flat: {speedCalculator.GetAverageFlatSpeed(trackPoints):0.##} m/s");
 
-            Console.WriteLine("Elevation");
-            Console.WriteLine($"Minimum: {elevationCalculator.GetMinimumElevation(trackPoints)}");
-            Console.WriteLine($"Maximum: {elevationCalculator.GetMaximumElevation(trackPoints)}");
-            Console.WriteLine($"Average: {elevationCalculator.GetAverageElevation(trackPoints)}");
-            Console.WriteLine($"Total climbing: {elevationCalculator.GetTotalClimbing(trackPoints)}");
-            Console.WriteLine($"Total descent: {elevationCalculator.GetTotalDescent(trackPoints)}");
-            Console.WriteLine($"Final balance: {elevationCalculator.GetFinalBalance(trackPoints)}");
+            Console.WriteLine("\nElevation");
+            Console.WriteLine($"Minimum: {elevationCalculator.GetMinimumElevation(trackPoints):0.##} m");
+            Console.WriteLine($"Maximum: {elevationCalculator.GetMaximumElevation(trackPoints):0.##} m");
+            Console.WriteLine($"Average: {elevationCalculator.GetAverageElevation(trackPoints):0.##} m");
+            Console.WriteLine($"Total climbing: {elevationCalculator.GetTotalClimbing(trackPoints):0.##} m");
+            Console.WriteLine($"Total descent: {elevationCalculator.GetTotalDescent(trackPoints):0.##} m");
+            Console.WriteLine($"Final balance: {elevationCalculator.GetFinalBalance(trackPoints):0.##} m");
 
-            Console.WriteLine("Time");
-            Console.WriteLine($"Total: {timeCalculator.GetTotalTrackTime(trackPoints)}");
-            Console.WriteLine($"Climbing: {timeCalculator.GetClimbingTime(trackPoints)}");
-            Console.WriteLine($"Descent: {timeCalculator.GetDescentTime(trackPoints)}");
-            Console.WriteLine($"Flat: {timeCalculator.GetFlatTime(trackPoints, 0.05)}");
+            Console.WriteLine("\nTime");
+            Console.WriteLine($"Total: {timeCalculator.GetTotalTrackTime(trackPoints):0.##} s");
+            Console.WriteLine($"Climbing: {timeCalculator.GetClimbingTime(trackPoints):0.##} s");
+            Console.WriteLine($"Descent: {timeCalculator.GetDescentTime(trackPoints):0.##} s");
+            Console.WriteLine($"Flat: {timeCalculator.GetFlatTime(trackPoints):0.##} s");
         }
     }
 }

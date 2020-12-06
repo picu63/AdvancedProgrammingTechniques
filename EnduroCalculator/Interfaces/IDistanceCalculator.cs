@@ -10,9 +10,9 @@ namespace EnduroCalculator.Interfaces
 {
     public interface IDistanceCalculator
     {
-        double GetTotalDistance(ICollection<TrackPoint> coordinates);
-        double GetClimbingDistance(ICollection<TrackPoint> coordinates);
-        double GetDescentDistance(ICollection<TrackPoint> coordinates);
-        double GetFlatDistance(ICollection<TrackPoint> coordinates, double range);
+        double GetTotalDistance(ICollection<TrackPoint> trackPoints);
+        double GetClimbingDistance(ICollection<TrackPoint> coordinates, double slopeDegree= 5);
+        double GetDescentDistance(ICollection<TrackPoint> coordinates, double slopeDegree= 5);
+        double GetFlatDistance(ICollection<TrackPoint> coordinates, double maxSlopeDegree= 5);
     }
 }

@@ -27,31 +27,35 @@ namespace EnduroCalculator
             return null;
         }
 
-        public ICollection<List<TrackPoint>> GetClimbingSections(ICollection<TrackPoint> trackPoints, double range = 0.1)
+        public ICollection<List<TrackPoint>> GetClimbingSections(ICollection<TrackPoint> trackPoints, double slopeDegree = 5)
         {
             var climbingSections = GetSections(trackPoints,
-                (previous, current) => current.Altitude > previous.Altitude + range);
+                (previous, current) => CalculateAngle(previous, current) < -slopeDegree);
             var climbingSectionsDistincted = climbingSections
-                .Select(track => track.DistinctBy(point => point.Altitude).ToList()).ToList();
+                .Select(track => track.DistinctBy(point => point.GetGeoCoordinate()).ToList()).ToList();
 
             return climbingSectionsDistincted;
         }
 
-        public ICollection<List<TrackPoint>> GetDescentSections(ICollection<TrackPoint> trackPoints, double range = 0.1)
+        public ICollection<List<TrackPoint>> GetDescentSections(ICollection<TrackPoint> trackPoints, double slopeDegree = 5)
         {
             var descentSections = GetSections(trackPoints,
-                (previous, current) => current.Altitude < previous.Altitude - range);
+                (previous, current) => CalculateAngle(previous,current) < slopeDegree);
             var descentSectionsDisctincted = descentSections
-                .Select((track => track.DistinctBy(point => point.Altitude).ToList())).ToList();
+                .Select((track => track.DistinctBy(point => point.GetGeoCoordinate()).ToList())).ToList();
             return descentSectionsDisctincted;
         }
 
-        public ICollection<List<TrackPoint>> GetFlatSections(ICollection<TrackPoint> trackPoints, double range = 0.1)
+        public ICollection<List<TrackPoint>> GetFlatSections(ICollection<TrackPoint> trackPoints, double slopeDegree = 5)
         {
             var flatSections = GetSections(trackPoints,
-                (previous, current) => Math.Abs(current.Altitude - previous.Altitude) <= range);
+                (previous, current) =>
+                {
+                    var angle = CalculateAngle(previous, current);
+                    return angle <= slopeDegree && angle >= -slopeDegree;
+                });
             var flatSectionsDistincted = flatSections
-                .Select((track => track.DistinctBy(point => point.DateTime).ToList())).ToList();
+                .Select((track => track.DistinctBy(point => point.GetGeoCoordinate()).ToList())).ToList();
 
             return flatSectionsDistincted;
         }
@@ -102,12 +106,13 @@ namespace EnduroCalculator
             var timeInSeconds = timeSpan.TotalSeconds;
             return distance / timeInSeconds;
         }
-    }
 
-    public enum Direction
-    {
-        Climbing,
-        Descending,
-        Flat,
+        private double CalculateAngle(TrackPoint startPoint, TrackPoint endPoint)
+        {
+            var altitudeDif = startPoint.Altitude - endPoint.Altitude;
+            var distance = startPoint.GetGeoCoordinate().GetDistanceTo(endPoint.GetGeoCoordinate());
+            var radians = Math.Tan(altitudeDif / distance); ;
+            return radians * (180 / Math.PI);
+        }
     }
 }

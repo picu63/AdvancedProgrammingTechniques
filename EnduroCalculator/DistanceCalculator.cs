@@ -9,32 +9,31 @@ namespace EnduroCalculator
 {
     public class DistanceCalculator : IDistanceCalculator
     {
-        public double GetTotalDistance(ICollection<TrackPoint> coordinates)
+        public double GetTotalDistance(ICollection<TrackPoint> trackPoints)
         {
-            var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
-
-            double totalDistance = 0;
+            var geoCoordinates = trackPoints.Select((t) => t.GetGeoCoordinate());
+            double distance = 0;
             while (true)
             {
                 var first = geoCoordinates.FirstOrDefault();
                 var second = geoCoordinates.Skip(1).FirstOrDefault();
-                if (second is null)
+                if (first is null || second is null)
                 {
                     break;
                 }
 
-                var distance = totalDistance + first.GetDistanceTo(second);
+                distance += first.GetDistanceTo(second);
                 geoCoordinates = geoCoordinates.Skip(1);
-                totalDistance = distance;
             }
 
-            return totalDistance;
+            return distance;
         }
 
-        public double GetClimbingDistance(ICollection<TrackPoint> coordinates)
+        public double GetClimbingDistance(ICollection<TrackPoint> coordinates, double slopeDegree)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var climbingSections = trackCalculator.GetClimbingSections(coordinates);
+            var climbingSections = trackCalculator.GetClimbingSections(coordinates, slopeDegree);
+            int count = climbingSections.Sum((list => list.Count));
             double climbingDistance = 0;
             foreach(var section in climbingSections)
             {
@@ -54,11 +53,13 @@ namespace EnduroCalculator
             return climbingDistance;
         }
 
-        public double GetDescentDistance(ICollection<TrackPoint> coordinates)
+        public double GetDescentDistance(ICollection<TrackPoint> coordinates, double slopeDegree)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetDescentSections(coordinates);
+            var descentTracks = trackCalculator.GetDescentSections(coordinates, slopeDegree);
+            int count = descentTracks.Sum((list => list.Count));
             double descentDistance = 0;
+
             foreach (var section in descentTracks)
             {
                 var geoCoordinates = section.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
@@ -77,10 +78,10 @@ namespace EnduroCalculator
             return descentDistance;
         }
 
-        public double GetFlatDistance(ICollection<TrackPoint> coordinates, double range = 0.05)
+        public double GetFlatDistance(ICollection<TrackPoint> coordinates, double maxSlopeDegree)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetFlatSections(coordinates, range);
+            var flatTracks = trackCalculator.GetFlatSections(coordinates, maxSlopeDegree);
             double flatDistance = 0;
             foreach (var section in flatTracks)
             {
@@ -93,7 +94,7 @@ namespace EnduroCalculator
                     {
                         return flatDistance;
                     }
-                    flatDistance = first.GetDistanceTo(second);
+                    flatDistance += first.GetDistanceTo(second);
                     geoCoordinates = geoCoordinates.Skip(1);
                 }
             }

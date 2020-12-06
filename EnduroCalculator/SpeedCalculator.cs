@@ -15,28 +15,30 @@ namespace EnduroCalculator
         {
             var trackCalculator = new TrackCalculator();
             var velocities = trackCalculator.GetAllVelocities(trackPoints);
-            return velocities.Min();
+            var min = velocities.Min();
+            return min;
         }
 
         public double GetMaximumSpeed(ICollection<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
             var velocities = trackCalculator.GetAllVelocities(trackPoints);
-            return velocities.Max();
+            var max = velocities.Max();
+            return max;
         }
 
         public double GetAverageSpeed(ICollection<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
             var velocities = trackCalculator.GetAllVelocities(trackPoints).ToList();
-
-            return velocities.Average();
+            var average = velocities.Average();
+            return average;
         }
 
-        public double GetAverageClimbingSpeed(ICollection<TrackPoint> trackPoints)
+        public double GetAverageClimbingSpeed(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             var trackCalculator = new TrackCalculator();
-            var climbingTracks = trackCalculator.GetClimbingSections(trackPoints);
+            var climbingTracks = trackCalculator.GetClimbingSections(trackPoints, slopeDegree);
             var averageClimbSpeedList = new List<double>();
             foreach (var climbingTrack in climbingTracks)
             {
@@ -44,39 +46,35 @@ namespace EnduroCalculator
                 averageClimbSpeedList.Add(averageClimbSpeed*climbingTrack.Count);
             }
 
-            return averageClimbSpeedList.Average();
+            return averageClimbSpeedList.Average()/climbingTracks.Count;
         }
 
-        public double GetAverageDescentSpeed(ICollection<TrackPoint> trackPoints)
+        public double GetAverageDescentSpeed(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             var trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetClimbingSections(trackPoints);
+            var descentSections = trackCalculator.GetDescentSections(trackPoints, slopeDegree);
             var averageDescentSpeedList = new List<double>();
-            foreach (var descentTrack in descentTracks)
+            foreach (var descentSection in descentSections)
             {
-                var averageDescentSpeed = GetAverageSpeed(descentTrack);
-                averageDescentSpeedList.Add(averageDescentSpeed * descentTrack.Count);
+                var averageDescentSpeed = GetAverageSpeed(descentSection);
+                averageDescentSpeedList.Add(averageDescentSpeed*descentSection.Count);
             }
 
-            return averageDescentSpeedList.Average();
+            return averageDescentSpeedList.Average()/descentSections.Count;
         }
 
-        public double GetAverageFlatSpeed(ICollection<TrackPoint> trackPoints, double range)
+        public double GetAverageFlatSpeed(ICollection<TrackPoint> trackPoints, double maxSlopeDegree)
         {
             var trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetFlatSections(trackPoints, range);
+            var flatTracks = trackCalculator.GetFlatSections(trackPoints, maxSlopeDegree);
             var averageFlatSpeedList = new List<double>();
             foreach (var flatTrack in flatTracks)
             {
                 var averageFlatSpeed = GetAverageSpeed(flatTrack);
-                if (averageFlatSpeed == 0)
-                {
-                    continue;
-                }
                 averageFlatSpeedList.Add(averageFlatSpeed*flatTrack.Count);
             }
 
-            return averageFlatSpeedList.Average();
+            return averageFlatSpeedList.Average()/flatTracks.Count;
         }
     }
 }

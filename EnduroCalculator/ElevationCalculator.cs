@@ -34,14 +34,14 @@ namespace EnduroCalculator
             return (avg);
         }
 
-        public double GetTotalClimbing(ICollection<TrackPoint> trackPoints)
+        public double GetTotalClimbing(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var climbingTracks = trackCalculator.GetClimbingSections(trackPoints);
+            var climbingSections = trackCalculator.GetClimbingSections(trackPoints);
             double total = 0;
-            foreach (var climbingTrack in climbingTracks)
+            foreach (var section in climbingSections)
             {
-                var geoCoordinates = climbingTrack.Select((t) => t.Altitude);
+                var geoCoordinates = section.Select((t) => t.Altitude);
 
                 var min = geoCoordinates.Min();
                 var max = geoCoordinates.Max();
@@ -51,7 +51,7 @@ namespace EnduroCalculator
             return total;
         }
 
-        public double GetTotalDescent(ICollection<TrackPoint> trackPoints)
+        public double GetTotalDescent(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
             var descentTracks = trackCalculator.GetDescentSections(trackPoints);

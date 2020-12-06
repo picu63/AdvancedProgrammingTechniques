@@ -9,7 +9,7 @@ namespace EnduroCalculator
 {
     public class TimeCalculator : ITimeCalculator
     {
-        public double GetClimbingTime(ICollection<TrackPoint> trackPoints)
+        public double GetClimbingTime(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             var trackCalculator = new TrackCalculator();
             var climbigTracks = trackCalculator.GetClimbingSections(trackPoints);
@@ -27,7 +27,7 @@ namespace EnduroCalculator
             return total.TotalSeconds;
         }
 
-        public double GetDescentTime(ICollection<TrackPoint> trackPoints)
+        public double GetDescentTime(ICollection<TrackPoint> trackPoints, double slopeDegree)
         {
             var trackCalculator = new TrackCalculator();
             var descentTracks = trackCalculator.GetDescentSections(trackPoints);
