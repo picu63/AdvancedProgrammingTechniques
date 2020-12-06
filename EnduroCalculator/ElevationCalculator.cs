@@ -37,7 +37,7 @@ namespace EnduroCalculator
         public double GetTotalClimbing(IEnumerable<TrackPoint> trackPoints)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var climbingTracks = trackCalculator.GetClimbingTracks(trackPoints);
+            var climbingTracks = trackCalculator.GetClimbingSections(trackPoints);
             double total = 0;
             foreach (var climbingTrack in climbingTracks)
             {
@@ -54,7 +54,7 @@ namespace EnduroCalculator
         public double GetTotalDescent(IEnumerable<TrackPoint> trackPoints)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetDescentTracks(trackPoints);
+            var descentTracks = trackCalculator.GetDescentSections(trackPoints);
             double total = 0;
             foreach (var descentTrack in descentTracks)
             {

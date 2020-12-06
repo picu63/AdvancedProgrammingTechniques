@@ -34,11 +34,11 @@ namespace EnduroCalculator
         public double GetClimbingDistance(IEnumerable<TrackPoint> coordinates)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var climbingTracks = trackCalculator.GetClimbingTracks(coordinates);
+            var climbingSections = trackCalculator.GetClimbingSections(coordinates);
             double climbingDistance = 0;
-            foreach(var track in climbingTracks)
+            foreach(var section in climbingSections)
             {
-                var geoCoordinates = coordinates.Select((t) => new GeoCoordinate(t.Latitude, t.Longitude));
+                var geoCoordinates = coordinates.Select((t) => t.GetGeoCoordinate());
                 while (true)
                 {
                     var first = geoCoordinates.FirstOrDefault();
@@ -57,7 +57,7 @@ namespace EnduroCalculator
         public double GetDescentDistance(IEnumerable<TrackPoint> coordinates)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetClimbingTracks(coordinates);
+            var descentTracks = trackCalculator.GetClimbingSections(coordinates);
             double descentDistance = 0;
             foreach (var track in descentTracks)
             {
@@ -80,7 +80,7 @@ namespace EnduroCalculator
         public double GetFlatDistance(IEnumerable<TrackPoint> coordinates, double range)
         {
             TrackCalculator trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetClimbingTracks(coordinates);
+            var flatTracks = trackCalculator.GetClimbingSections(coordinates);
             double flatDistance = 0;
             foreach (var track in flatTracks)
             {

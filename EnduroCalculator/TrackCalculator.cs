@@ -10,55 +10,36 @@ namespace EnduroCalculator
 {
     public class TrackCalculator : ITrackCalculator
     {
-        public IEnumerable<List<TrackPoint>> GetClimbingTracks(IEnumerable<TrackPoint> trackPoints)
+        public IEnumerable<List<TrackPoint>> GetClimbingSections(IEnumerable<TrackPoint> trackPoints)
         {
-            var climbingTracks = new List<List<TrackPoint>>();
+            var climbingSections = new List<List<TrackPoint>>();
             var tp = trackPoints.ToList();
-            var currentTrackPoints = new List<TrackPoint>();
+            var currentSection = new List<TrackPoint>();
             for (var i = 1; i < tp.Count; i++)
             {
                 var current = tp[i];
                 var previous = tp[i - 1];
                 if (current.Altitude > previous.Altitude)
                 {
-                    currentTrackPoints.Add(previous);
-                    currentTrackPoints.Add(current);
+                    currentSection.Add(previous);
+                    currentSection.Add(current);
                 }
-                else if(currentTrackPoints.Count >= 2)
+                else if(currentSection.Count >= 2)
                 {
-                    climbingTracks.Add(currentTrackPoints);
-                    currentTrackPoints = new List<TrackPoint>();
+                    climbingSections.Add(currentSection);
+                    currentSection = new List<TrackPoint>();
                 }
             }
-            if (currentTrackPoints.Count >= 2)
+            if (currentSection.Count >= 2)
             {
-                climbingTracks.Add(currentTrackPoints);
+                climbingSections.Add(currentSection);
             }
-            var climbingTracksDistincted = climbingTracks
+            var climbingSectionsDistincted = climbingSections
                 .Select(track => track.DistinctBy(point => point.Altitude).ToList());
 
-            return climbingTracksDistincted;
+            return climbingSectionsDistincted;
         }
 
-        public IEnumerable<List<TrackPoint>> GetAlltitudeDirection(IEnumerable<TrackPoint> trackPoints,
-            Direction direction)
-        {
-
-            switch (direction)
-            {
-                case Direction.Climbing:
-
-                    break;
-                case Direction.Descending:
-                    break;
-                case Direction.Flat:
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(direction), direction, null);
-            }
-
-            return null;
-        }
 
         public IEnumerable<double> GetAllVelocities(IEnumerable<TrackPoint> trackPoints)
         {
@@ -73,71 +54,99 @@ namespace EnduroCalculator
 
         public double GetVelocity(TrackPoint startPoint, TrackPoint endPoint)
         {
-            //TODO sprawdzić w jakiej jednostce mierzony jest dystans
             var distance = startPoint.GetGeoCoordinate().GetDistanceTo(endPoint.GetGeoCoordinate());
             var timeSpan = endPoint.DateTime - startPoint.DateTime;
             var timeInSeconds = timeSpan.TotalSeconds;
             return distance / timeInSeconds;
         }
 
-        public IEnumerable<List<TrackPoint>> GetDescentTracks(IEnumerable<TrackPoint> trackPoints)
+        public IEnumerable<List<TrackPoint>> GetDescentSections(IEnumerable<TrackPoint> trackPoints)
         {
-            var descentTracks = new List<List<TrackPoint>>();
             var tp = trackPoints.ToList();
-            var currentTrackPoints = new List<TrackPoint>();
+            var descentSections = new List<List<TrackPoint>>();
+            var currentSections = new List<TrackPoint>();
             for (var i = 1; i < tp.Count; i++)
             {
                 var current = tp[i];
                 var previous = tp[i - 1];
                 if (current.Altitude < previous.Altitude)
                 {
-                    currentTrackPoints.Add(previous);
-                    currentTrackPoints.Add(current);
+                    currentSections.Add(previous);
+                    currentSections.Add(current);
                 }
-                else if (currentTrackPoints.Count >= 2)
+                else if (currentSections.Count >= 2)
                 {
-                    descentTracks.Add(currentTrackPoints);
-                    currentTrackPoints = new List<TrackPoint>();
+                    descentSections.Add(currentSections);
+                    currentSections = new List<TrackPoint>();
                 }
             }
-            if (currentTrackPoints.Count >= 2)
+            if (currentSections.Count >= 2)
             {
-                descentTracks.Add(currentTrackPoints);
+                descentSections.Add(currentSections);
             }
-            var descentTracksDistincted = descentTracks
+            var descentSectionsDistincted = descentSections
                 .Select(track => track.DistinctBy(point => point.Altitude).ToList());
 
-            return descentTracksDistincted;
+            return descentSectionsDistincted;
         }
 
-        public IEnumerable<List<TrackPoint>> GetFlatTracks(IEnumerable<TrackPoint> trackPoints, double range)
+        public IEnumerable<List<TrackPoint>> GetFlatSections(IEnumerable<TrackPoint> trackPoints, double range)
         {
-            var flatTracks = new List<List<TrackPoint>>();
             var tp = trackPoints.ToList();
-            var currentTrackPoints = new List<TrackPoint>();
+            var flatSections = new List<List<TrackPoint>>();
+            var currentSection = new List<TrackPoint>();
             for (var i = 1; i < tp.Count; i++)
             {
                 var current = tp[i];
                 var previous = tp[i - 1];
                 if (Math.Abs(current.Altitude - previous.Altitude) <= range)
                 {
-                    currentTrackPoints.Add(previous);
-                    currentTrackPoints.Add(current);
+                    currentSection.Add(previous);
+                    currentSection.Add(current);
                 }
-                else if (currentTrackPoints.Count >= 2)
+                else if (currentSection.Count >= 2)
                 {
-                    flatTracks.Add(currentTrackPoints);
-                    currentTrackPoints = new List<TrackPoint>();
+                    flatSections.Add(currentSection);
+                    currentSection = new List<TrackPoint>();
                 }
             }
-            if (currentTrackPoints.Count >= 2)
+            if (currentSection.Count >= 2)
             {
-                flatTracks.Add(currentTrackPoints);
+                flatSections.Add(currentSection);
             }
-            var flatTracksDistincted = flatTracks
+            var flatSectionsDistincted = flatSections
                 .Select(track => track.DistinctBy(point => point.Altitude).ToList());
 
-            return flatTracksDistincted;
+            return flatSectionsDistincted;
+        }
+        
+        public IEnumerable<List<TrackPoint>> GetSections(IEnumerable<TrackPoint> trackPoints, Func<TrackPoint, TrackPoint, double, bool> predicate, double range = 0.05)
+        {
+
+            var tp = trackPoints.ToList();
+            var sections = new List<List<TrackPoint>>();
+            var currentSection = new List<TrackPoint>();
+            for (var i = 1; i < tp.Count; i++)
+            {
+                var current = tp[i];
+                var previous = tp[i - 1];
+                if (predicate(current, previous, range))
+                {
+                    currentSection.Add(previous);
+                    currentSection.Add(current);
+                }
+                else if (currentSection.Count >= 2)
+                {
+                    sections.Add(currentSection);
+                    currentSection = new List<TrackPoint>();
+                }
+            }
+            if (currentSection.Count >= 2)
+            {
+                sections.Add(currentSection);
+            }
+
+            return sections;
         }
     }
 

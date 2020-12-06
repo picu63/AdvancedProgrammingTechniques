@@ -35,7 +35,7 @@ namespace EnduroCalculator
         public double GetAverageClimbingSpeed(IEnumerable<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
-            var climbingTracks = trackCalculator.GetClimbingTracks(trackPoints);
+            var climbingTracks = trackCalculator.GetClimbingSections(trackPoints);
             var averageClimbSpeedList = new List<double>();
             foreach (var climbingTrack in climbingTracks)
             {
@@ -49,7 +49,7 @@ namespace EnduroCalculator
         public double GetAverageDescentSpeed(IEnumerable<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetClimbingTracks(trackPoints);
+            var descentTracks = trackCalculator.GetClimbingSections(trackPoints);
             var averageDescentSpeedList = new List<double>();
             foreach (var descentTrack in descentTracks)
             {
@@ -63,7 +63,7 @@ namespace EnduroCalculator
         public double GetAverageFlatSpeed(IEnumerable<TrackPoint> trackPoints, double range)
         {
             var trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetFlatTracks(trackPoints, range);
+            var flatTracks = trackCalculator.GetFlatSections(trackPoints, range);
             var averageFlatSpeedList = new List<double>();
             foreach (var flatTrack in flatTracks)
             {

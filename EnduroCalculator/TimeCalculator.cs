@@ -12,7 +12,7 @@ namespace EnduroCalculator
         public double GetClimbingTime(IEnumerable<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
-            var climbigTracks = trackCalculator.GetClimbingTracks(trackPoints);
+            var climbigTracks = trackCalculator.GetClimbingSections(trackPoints);
             TimeSpan total;
 
             foreach (var climbing in climbigTracks)
@@ -30,7 +30,7 @@ namespace EnduroCalculator
         public double GetDescentTime(IEnumerable<TrackPoint> trackPoints)
         {
             var trackCalculator = new TrackCalculator();
-            var descentTracks = trackCalculator.GetDescentTracks(trackPoints);
+            var descentTracks = trackCalculator.GetDescentSections(trackPoints);
             TimeSpan total ;
 
             foreach (var descent in descentTracks)
@@ -48,7 +48,7 @@ namespace EnduroCalculator
         public double GetFlatTime(IEnumerable<TrackPoint> trackPoints, double range)
         {
             var trackCalculator = new TrackCalculator();
-            var flatTracks = trackCalculator.GetFlatTracks(trackPoints,range);
+            var flatTracks = trackCalculator.GetFlatSections(trackPoints,range);
             TimeSpan total;
 
             foreach (var flat in flatTracks)
