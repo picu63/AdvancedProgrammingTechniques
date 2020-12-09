@@ -33,6 +33,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroLibrary", "EnduroLibr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EnduroTrackReader", "EnduroTrackReader\EnduroTrackReader.csproj", "{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EnduroCalculatorv2", "EnduroCalculatorv2\EnduroCalculatorv2.csproj", "{37DC6D27-F177-4434-BC12-E9F0F03537B8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{37DC6D27-F177-4434-BC12-E9F0F03537B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37DC6D27-F177-4434-BC12-E9F0F03537B8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37DC6D27-F177-4434-BC12-E9F0F03537B8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37DC6D27-F177-4434-BC12-E9F0F03537B8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -104,6 +110,7 @@ Global
 		{BFB0BDD8-A086-4392-B9B5-F3D2BB604700} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 		{0EF0B17E-2B49-48DC-A880-456CF20CEE35} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 		{7A713FB5-1CC2-493D-8ADA-9B9FB5B255D3} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
+		{37DC6D27-F177-4434-BC12-E9F0F03537B8} = {CC84876B-C5AE-4932-921E-A499A5C4ED70}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC1FE6C0-B4E8-421D-A69F-771725B9AC96}
