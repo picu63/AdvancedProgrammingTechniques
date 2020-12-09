@@ -6,7 +6,7 @@ using System.Text;
 using CsvHelper;
 using CsvHelper.Configuration.Attributes;
 
-namespace ZTP.Scheduler.Models
+namespace OrderLibrary.Models
 {
     public class Order
     {
@@ -27,11 +27,11 @@ namespace ZTP.Scheduler.Models
         [Index(7)]
         public string AdresZamowienia { get; set; }
         [Index(8)]
-        public string email { get; set; }
+        public string Email { get; set; }
 
         public override string ToString()
         {
-            return $"{Id},{Imie},{Nazwisko},{NrZamowienia},{Cena},{Ilosc},{AdresZamowienia},{email}";
+            return $"{Id},{Imie},{Nazwisko},{NrZamowienia},{Cena},{Ilosc},{AdresZamowienia},{Email}";
         }
     }
 }
