@@ -14,13 +14,15 @@ namespace EnduroCalculatorv2
             var points = trackReader.GetAllPoints();
             Track track = new Track(points.ToList());
 
-            var calculatorProcessor = new CalculatorProcessor(track)
+            var calculatorService = new CalculatorService(track)
                 .AddCalculator(new DistanceCalculator())
                 .AddCalculator(new ElevationCalculator())
                 .AddCalculator(new SpeedCalculator())
                 .AddCalculator(new TimeCalculator())
-                .CalculateTrack();
-            calculatorProcessor.PrintAllCalculations();
+                .SetSlope(5)
+                .AddTimeFilter(60)
+                .CalculateAll();
+            calculatorService.PrintAllCalculations();
         }
     }
 }

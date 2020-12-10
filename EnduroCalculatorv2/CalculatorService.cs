@@ -6,47 +6,36 @@ using EnduroLibrary;
 
 namespace EnduroCalculatorv2
 {
-    public class CalculatorProcessor : IPrintCalculations
+    public class CalculatorService : ICalculations, IPrintCalculations
     {
         private readonly Track _track;
         private readonly List<ICalculator> _calculators = new List<ICalculator>();
-        public CalculatorProcessor(Track track)
+        public CalculatorService(Track track)
         {
             this._track = track;
         }
 
-        public CalculatorProcessor AddCalculator(ICalculator calculator)
+        public CalculatorService AddCalculator(ICalculator calculator)
         {
-            calculator.SetupStart(_track.TrackPoints.First());
             this._calculators.Add(calculator);
             return this;
         }
 
-        public CalculatorProcessor SetTolerance(double toleranceInMeters)
+        public CalculatorService SetSlope(double slopePercentage)
         {
             foreach (var calculator in _calculators)
             {
-                calculator.AddTolerance(toleranceInMeters);
+                calculator.Slope = slopePercentage;
             }
 
             return this;
         }
 
-        public CalculatorProcessor SetupStartPoint(TrackPoint startPoint)
+        public IPrintCalculations CalculateAll()
         {
             foreach (var calculator in _calculators)
             {
-                calculator.SetupStart(startPoint);
-            }
-
-            return this;
-        }
-
-        public IPrintCalculations CalculateTrack()
-        {
-            foreach (var calculator in _calculators)
-            {
-                foreach (var trackPoint in _track.TrackPoints.Skip(1))
+                foreach (var trackPoint in _track.TrackPoints)
                 {
                     calculator.Calculate(trackPoint);
                 }
@@ -55,11 +44,22 @@ namespace EnduroCalculatorv2
             return this;
         }
 
+        public IPrintCalculations CalculateTrack(ICalculator calculator)
+        {
+            _calculators.Add(calculator);
+            foreach (var trackPoint in _track.TrackPoints)
+            {
+                calculator.Calculate(trackPoint);
+            }
+            return this;
+        }
+
         public void PrintAllCalculations()
         {
             foreach (var calculator in _calculators)
             {
                 calculator.PrintResult();
+                Console.WriteLine();
             }
         }
 
@@ -72,11 +72,15 @@ namespace EnduroCalculatorv2
 
             return this;
         }
-    }
 
-    public interface IPrintCalculations
-    {
-        void PrintAllCalculations();
-        IPrintCalculations PrintCalculationResult(ICalculator calculator);
+        public CalculatorService AddTimeFilter(double seconds)
+        {
+            foreach (var calculator in _calculators)
+            {
+                calculator.TimeFilter = seconds;
+            }
+
+            return this;
+        }
     }
 }

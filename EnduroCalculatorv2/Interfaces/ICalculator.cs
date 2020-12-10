@@ -4,9 +4,9 @@ namespace EnduroCalculatorv2
 {
     public interface ICalculator
     {
-        public void SetupStart(TrackPoint startPoint);
         public void Calculate(TrackPoint nextPoint);
-        public void AddTolerance(double toleranceInMeters);
+        public double Slope { get; set; }
+        public double TimeFilter { get; set; }
         public void PrintResult();
     }
 }

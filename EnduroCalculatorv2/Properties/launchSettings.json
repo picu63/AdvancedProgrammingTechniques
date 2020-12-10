@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "EnduroCalculatorv2": {
+      "commandName": "Project",
+      "commandLineArgs": ".\\TestFiles\\Twister.gpx"
+    }
+  }
+}

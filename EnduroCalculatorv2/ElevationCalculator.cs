@@ -2,29 +2,20 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
-using EnduroCalculatorv2;
 using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class ElevationCalculator : ICalculator
+    public class ElevationCalculator : Calculator
     {
-        public void SetupStart(TrackPoint startPoint)
+        public TrackPoint StartPoint { get; set; }
+
+        public override void Calculate(TrackPoint nextPoint)
         {
             throw new NotImplementedException();
         }
 
-        public void Calculate(TrackPoint nextPoint)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddTolerance(double toleranceInMeters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PrintResult()
+        public override void PrintResult()
         {
             throw new NotImplementedException();
         }

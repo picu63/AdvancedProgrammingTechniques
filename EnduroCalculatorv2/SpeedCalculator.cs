@@ -9,24 +9,9 @@ using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class SpeedCalculator : ICalculator
+    public class SpeedCalculator : Calculator
     {
-        public void SetupStart(TrackPoint startPoint)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Calculate(TrackPoint nextPoint)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddTolerance(double toleranceInMeters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PrintResult()
+        public override void PrintResult()
         {
             throw new NotImplementedException();
         }

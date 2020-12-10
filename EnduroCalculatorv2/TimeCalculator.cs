@@ -7,24 +7,16 @@ using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class TimeCalculator : ICalculator
+    public class TimeCalculator : Calculator
     {
-        public void SetupStart(TrackPoint startPoint)
+        public override double TimeFilter { get; set; }
+
+        public override void Calculate(TrackPoint nextPoint)
         {
-            throw new NotImplementedException();
+            base.Calculate(nextPoint);
         }
 
-        public void Calculate(TrackPoint nextPoint)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddTolerance(double toleranceInMeters)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void PrintResult()
+        public override void PrintResult()
         {
             throw new NotImplementedException();
         }

@@ -2,47 +2,46 @@
 using System.Collections.Generic;
 using System.Device.Location;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using EnduroCalculatorv2;
 using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class DistanceCalculator : ICalculator
+    public class DistanceCalculator : Calculator
     {
         private double totalDistance;
         private double climbDistance;
         private double descentDistance;
-        private TrackPoint previousTrackPoint;
-        public void SetupStart(TrackPoint startPoint)
+        private double flatDistance;
+        public override void Calculate(TrackPoint nextPoint)
         {
-            previousTrackPoint = startPoint;
-        }
-
-        public void Calculate(TrackPoint nextPoint)
-        {
-            if (previousTrackPoint is null)
-            {
-                throw new ArgumentNullException(nameof(previousTrackPoint), "There is no start point initialized.");
-            }
-            var distance = previousTrackPoint.GetGeoCoordinate().GetDistanceTo(nextPoint.GetGeoCoordinate());
+            base.Calculate(nextPoint);
+            if ((nextPoint.DateTime - CurrentPoint.DateTime).TotalSeconds > TimeFilter)
+                return;
+            var distance = CurrentPoint.GetGeoCoordinate().GetDistanceTo(nextPoint.GetGeoCoordinate());
             totalDistance += distance;
-            if (previousTrackPoint.Altitude < nextPoint.Altitude)
+            switch (CurrentDirection)
             {
-                climbDistance += distance;
+                case AltitudeDirection.Climbing:
+                    climbDistance += distance;
+                    break;
+                case AltitudeDirection.Descent:
+                    descentDistance += distance;
+                    break;
+                case AltitudeDirection.Flat:
+                    flatDistance += distance;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
-            if (previousTrackPoint.Altitude > nextPoint.Altitude)
-            {
-                descentDistance += distance;
-            }
+            CurrentPoint = nextPoint;
         }
 
-        public void AddTolerance(double toleranceInMeters)
-        {
-            throw new NotImplementedException();
-        }
+        public override double Slope { get; set; }
 
-        public void PrintResult()
+        public override void PrintResult()
         {
             throw new NotImplementedException();
         }
