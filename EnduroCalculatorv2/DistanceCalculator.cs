@@ -17,7 +17,9 @@ namespace EnduroCalculator
         public override void Calculate(TrackPoint nextPoint)
         {
             base.Calculate(nextPoint);
-            if ((nextPoint.DateTime - CurrentPoint.DateTime).TotalSeconds > TimeFilter)
+
+            var timeSpanSeconds = (nextPoint.DateTime - CurrentPoint.DateTime).TotalSeconds;
+            if (timeSpanSeconds > TimeFilter || timeSpanSeconds==0)
                 return;
             var distance = CurrentPoint.GetGeoCoordinate().GetDistanceTo(nextPoint.GetGeoCoordinate());
             totalDistance += distance;
@@ -43,7 +45,7 @@ namespace EnduroCalculator
 
         public override void PrintResult()
         {
-            throw new NotImplementedException();
+            
         }
     }
 }

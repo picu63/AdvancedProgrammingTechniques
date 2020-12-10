@@ -19,8 +19,8 @@ namespace EnduroCalculatorv2
                 .AddCalculator(new ElevationCalculator())
                 .AddCalculator(new SpeedCalculator())
                 .AddCalculator(new TimeCalculator())
-                .SetSlope(5)
-                .AddTimeFilter(60)
+                .SetSlope(2)
+                .AddTimeFilter(7200)
                 .CalculateAll();
             calculatorService.PrintAllCalculations();
         }
