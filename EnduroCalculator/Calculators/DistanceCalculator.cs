@@ -1,19 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Device.Location;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using EnduroCalculator;
 using EnduroLibrary;
 
-namespace EnduroCalculator
+namespace EnduroCalculator.Calculators
 {
-    public class DistanceCalculator : Calculator
+    public class DistanceCalculator : TrackCalculator
     {
-        private double totalDistance;
-        private double climbDistance;
-        private double descentDistance;
-        private double flatDistance;
+        private double _totalDistance;
+        private double _climbDistance;
+        private double _descentDistance;
+        private double _flatDistance;
         public override void Calculate(TrackPoint nextPoint)
         {
             base.Calculate(nextPoint);
@@ -22,17 +17,17 @@ namespace EnduroCalculator
             if (timeSpanSeconds > TimeFilter || timeSpanSeconds==0)
                 return;
             var distance = CurrentPoint.GetGeoCoordinate().GetDistanceTo(nextPoint.GetGeoCoordinate());
-            totalDistance += distance;
+            _totalDistance += distance;
             switch (CurrentDirection)
             {
                 case AltitudeDirection.Climbing:
-                    climbDistance += distance;
+                    _climbDistance += distance;
                     break;
                 case AltitudeDirection.Descent:
-                    descentDistance += distance;
+                    _descentDistance += distance;
                     break;
                 case AltitudeDirection.Flat:
-                    flatDistance += distance;
+                    _flatDistance += distance;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -45,10 +40,10 @@ namespace EnduroCalculator
         {
             Console.WriteLine("Distance");
             Console.WriteLine("----------------------------------");
-            Console.WriteLine("Total Distance: " + totalDistance);
-            Console.WriteLine("Climbing Distance: " + climbDistance);
-            Console.WriteLine("Descent Distance: " + descentDistance);
-            Console.WriteLine("Flat Distance: " + flatDistance);
+            Console.WriteLine("Total Distance: " + _totalDistance);
+            Console.WriteLine("Climbing Distance: " + _climbDistance);
+            Console.WriteLine("Descent Distance: " + _descentDistance);
+            Console.WriteLine("Flat Distance: " + _flatDistance);
         }
     }
 }

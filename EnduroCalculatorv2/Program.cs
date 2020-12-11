@@ -4,7 +4,7 @@ using EnduroCalculator;
 using EnduroLibrary;
 using EnduroTrackReader;
 
-namespace EnduroCalculatorv2
+namespace EnduroCalculator
 {
     class Program
     {

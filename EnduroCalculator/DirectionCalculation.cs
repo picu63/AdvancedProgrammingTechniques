@@ -5,9 +5,9 @@ using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    internal static class PointsCalculator
+    internal static class DirectionCalculation
     {
-        internal static AltitudeDirection CalculateDirection(TrackPoint previousPoint, TrackPoint currentPoint,
+        internal static AltitudeDirection CalculateDirectionWithTolerance(TrackPoint previousPoint, TrackPoint currentPoint,
             double tolerance = double.Epsilon)
         {
             var previousAltitude = previousPoint.Altitude;
@@ -16,14 +16,11 @@ namespace EnduroCalculator
             {
                 return AltitudeDirection.Climbing;
             }
-            else if (previousAltitude > currentAltitude + tolerance)
+            if (previousAltitude > currentAltitude + tolerance)
             {
                 return AltitudeDirection.Descent;
             }
-            else
-            {
-                return AltitudeDirection.Flat;
-            }
+            return AltitudeDirection.Flat;
         }
 
         internal static AltitudeDirection CalculateDirectionWithSlope(TrackPoint previousPoint, TrackPoint currentPoint,
@@ -48,5 +45,11 @@ namespace EnduroCalculator
             var deltaS = previousPoint.GetGeoCoordinate().GetDistanceTo(currentPoint.GetGeoCoordinate());
             return deltaH / deltaS;
         }
+    }
+    public enum AltitudeDirection
+    {
+        Climbing,
+        Descent,
+        Flat
     }
 }

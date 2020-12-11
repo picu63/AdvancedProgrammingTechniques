@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace EnduroCalculatorv2
+namespace EnduroCalculator
 {
     public enum AltitudeDirection
     {

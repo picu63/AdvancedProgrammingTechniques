@@ -1,21 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using EnduroLibrary;
 
 namespace EnduroCalculator
 {
-    public class CalculatorService : ICalculations, IPrintCalculations
+    public class CalculatorService : ITrackCalculation, IPrintCalculation
     {
         private readonly Track _track;
-        private readonly List<ICalculator> _calculators = new List<ICalculator>();
+        private readonly List<ITrackCalculator> _calculators = new List<ITrackCalculator>();
         public CalculatorService(Track track)
         {
             this._track = track;
         }
 
-        public CalculatorService AddCalculator(ICalculator calculator)
+        public CalculatorService AddCalculator(ITrackCalculator calculator)
         {
             this._calculators.Add(calculator);
             return this;
@@ -31,7 +29,7 @@ namespace EnduroCalculator
             return this;
         }
 
-        public IPrintCalculations CalculateAll()
+        public IPrintCalculation CalculateAll()
         {
             foreach (var calculator in _calculators)
             {
@@ -45,7 +43,7 @@ namespace EnduroCalculator
             return this;
         }
 
-        public IPrintCalculations CalculateTrack(ICalculator calculator)
+        public IPrintCalculation CalculateTrack(ITrackCalculator calculator)
         {
             _calculators.Add(calculator);
             foreach (var trackPoint in _track.TrackPoints)
@@ -64,7 +62,7 @@ namespace EnduroCalculator
             }
         }
 
-        public IPrintCalculations PrintCalculationResult(ICalculator calculator)
+        public IPrintCalculation PrintCalculationResult(ITrackCalculator calculator)
         {
             if (_calculators.Contains(calculator))
             {

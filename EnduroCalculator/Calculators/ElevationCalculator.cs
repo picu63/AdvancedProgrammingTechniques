@@ -1,30 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
-using EnduroCalculator;
 using EnduroLibrary;
 
-namespace EnduroCalculator
+namespace EnduroCalculator.Calculators
 {
-    public class ElevationCalculator : Calculator
+    public class ElevationCalculator : TrackCalculator
     {
-        private double totalClimbing;
-        private double totalDescent;
-        List<double> altitudes = new List<double>();
+        private double _totalClimbing;
+        private double _totalDescent;
+        List<double> _altitudes = new List<double>();
         public override void Calculate(TrackPoint nextPoint)
         {
-            altitudes.Add(nextPoint.Altitude);
+            _altitudes.Add(nextPoint.Altitude);
             base.Calculate(nextPoint);
             if ((nextPoint.DateTime - CurrentPoint.DateTime).TotalSeconds > TimeFilter)
                 return;
             switch (CurrentDirection)
             {
                 case AltitudeDirection.Climbing:
-                    totalClimbing += nextPoint.Altitude - CurrentPoint.Altitude;
+                    _totalClimbing += nextPoint.Altitude - CurrentPoint.Altitude;
                     break;
                 case AltitudeDirection.Descent:
-                    totalDescent += CurrentPoint.Altitude - nextPoint.Altitude;
+                    _totalDescent += CurrentPoint.Altitude - nextPoint.Altitude;
                     break;
                 case AltitudeDirection.Flat:
                     break;
@@ -36,17 +34,17 @@ namespace EnduroCalculator
 
         public override void PrintResult()
         {
-            var minElevation = altitudes.Min();
-            var maxElevation = altitudes.Max();
-            var averageElevation = altitudes.Average();
+            var minElevation = _altitudes.Min();
+            var maxElevation = _altitudes.Max();
+            var averageElevation = _altitudes.Average();
             var finalBalance = maxElevation - minElevation;
             Console.WriteLine("Elevation");
             Console.WriteLine("----------------------------------");
             Console.WriteLine("Minimum Elevation: " + minElevation);
             Console.WriteLine("Maximum Elevation: " + maxElevation);
             Console.WriteLine("Average Elevation: " + averageElevation);
-            Console.WriteLine("Total Climbing: " + totalClimbing);
-            Console.WriteLine("Total Descent: " + totalDescent);
+            Console.WriteLine("Total Climbing: " + _totalClimbing);
+            Console.WriteLine("Total Descent: " + _totalDescent);
             Console.WriteLine("Final Balance: " + finalBalance);
 
         }

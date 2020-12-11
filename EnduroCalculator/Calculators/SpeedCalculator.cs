@@ -1,20 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
-using System.IO;
 using System.Linq;
-using System.Text;
-using EnduroCalculator;
 using EnduroLibrary;
 
-namespace EnduroCalculator
+namespace EnduroCalculator.Calculators
 {
-    public class SpeedCalculator : Calculator
+    public class SpeedCalculator : TrackCalculator
     {
-        List<double> speeds = new List<double>();
-        List<double> climbingSpeeds = new List<double>();
-        List<double> descentSpeeds = new List<double>();
-        List<double> flatSpeeds = new List<double>();
+        private readonly List<double> _speeds = new List<double>();
+        private readonly List<double> _climbingSpeeds = new List<double>();
+        private readonly List<double> _descentSpeeds = new List<double>();
+        private readonly List<double> _flatSpeeds = new List<double>();
         public override void Calculate(TrackPoint nextPoint)
         {
             base.Calculate(nextPoint);
@@ -24,17 +20,17 @@ namespace EnduroCalculator
             var deltaS = CurrentPoint.GetGeoCoordinate().GetDistanceTo(nextPoint.GetGeoCoordinate());
             var deltaT = (nextPoint.DateTime - CurrentPoint.DateTime).TotalSeconds;
             var speed = deltaS / deltaT;
-            speeds.Add(speed);
+            _speeds.Add(speed);
             switch (CurrentDirection)
             {
                 case AltitudeDirection.Climbing:
-                    climbingSpeeds.Add(speed);
+                    _climbingSpeeds.Add(speed);
                     break;
                 case AltitudeDirection.Descent:
-                    descentSpeeds.Add(speed);
+                    _descentSpeeds.Add(speed);
                     break;
                 case AltitudeDirection.Flat:
-                    flatSpeeds.Add(speed);
+                    _flatSpeeds.Add(speed);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -44,12 +40,12 @@ namespace EnduroCalculator
 
         public override void PrintResult()
         {
-            var minSpeed = speeds.Min();
-            var maxSpeed = speeds.Max();
-            var averageSpeed = speeds.Average();
-            var averageClimbing = climbingSpeeds.Average();
-            var averageDescent = descentSpeeds.Average();
-            var averageFlat = flatSpeeds.Average();
+            var minSpeed = _speeds.Min();
+            var maxSpeed = _speeds.Max();
+            var averageSpeed = _speeds.Average();
+            var averageClimbing = _climbingSpeeds.Average();
+            var averageDescent = _descentSpeeds.Average();
+            var averageFlat = _flatSpeeds.Average();
             Console.WriteLine("Speed");
             Console.WriteLine("----------------------------------");
             Console.WriteLine("Minimum Speed: " + minSpeed);

@@ -1,4 +1,4 @@
-﻿namespace EnduroCalculatorv2
+﻿namespace EnduroCalculator
 {
     public interface ICalculations
     {

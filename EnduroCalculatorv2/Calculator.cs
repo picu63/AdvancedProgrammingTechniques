@@ -1,4 +1,4 @@
-﻿using EnduroCalculatorv2;
+﻿using EnduroCalculator;
 using EnduroLibrary;
 
 namespace EnduroCalculator

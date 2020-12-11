@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Device.Location;
 using System.Linq;
-using EnduroCalculator;
 using EnduroLibrary;
 
-namespace EnduroCalculator
+namespace EnduroCalculator.Calculators
 {
-    public class TimeCalculator : Calculator
+    public class TimeCalculator : TrackCalculator
     {
-        List<DateTime> times = new List<DateTime>();
-        private double climbingTime;
-        private double descentTime;
-        private double flatTime;
+        private readonly List<DateTime> _times = new List<DateTime>();
+        private double _climbingTime;
+        private double _descentTime;
+        private double _flatTime;
         public override void Calculate(TrackPoint nextPoint)
         {
             base.Calculate(nextPoint);
@@ -20,17 +18,17 @@ namespace EnduroCalculator
             var timeSpanSeconds = (nextTime - CurrentPoint.DateTime).TotalSeconds;
             if (timeSpanSeconds > TimeFilter || timeSpanSeconds == 0)
                 return;
-            times.Add(nextTime);
+            _times.Add(nextTime);
             switch (CurrentDirection)
             {
                 case AltitudeDirection.Climbing:
-                    climbingTime += timeSpanSeconds;
+                    _climbingTime += timeSpanSeconds;
                     break;
                 case AltitudeDirection.Descent:
-                    descentTime += timeSpanSeconds;
+                    _descentTime += timeSpanSeconds;
                     break;
                 case AltitudeDirection.Flat:
-                    flatTime += timeSpanSeconds;
+                    _flatTime += timeSpanSeconds;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -40,13 +38,13 @@ namespace EnduroCalculator
 
         public override void PrintResult()
         {
-            var total = times.Max() - times.Min();
+            var total = _times.Max() - _times.Min();
             Console.WriteLine("Time");
             Console.WriteLine("----------------------------------");
             Console.WriteLine("Total Track Time: " + total);
-            Console.WriteLine("Climbing Time: " + climbingTime);
-            Console.WriteLine("Descent Time: " + descentTime);
-            Console.WriteLine("Flat Time: " + flatTime);
+            Console.WriteLine("Climbing Time: " + _climbingTime);
+            Console.WriteLine("Descent Time: " + _descentTime);
+            Console.WriteLine("Flat Time: " + _flatTime);
         }
     }
 }
