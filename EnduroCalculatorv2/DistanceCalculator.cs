@@ -45,7 +45,12 @@ namespace EnduroCalculator
 
         public override void PrintResult()
         {
-            
+            Console.WriteLine("Distance");
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Total Distance: " + totalDistance);
+            Console.WriteLine("Climbing Distance: " + climbDistance);
+            Console.WriteLine("Descent Distance: " + descentDistance);
+            Console.WriteLine("Flat Distance: " + flatDistance);
         }
     }
 }

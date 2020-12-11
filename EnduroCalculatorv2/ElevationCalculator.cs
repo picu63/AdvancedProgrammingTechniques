@@ -40,6 +40,15 @@ namespace EnduroCalculator
             var maxElevation = altitudes.Max();
             var averageElevation = altitudes.Average();
             var finalBalance = maxElevation - minElevation;
+            Console.WriteLine("Elevation");
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Minimum Elevation: " + minElevation);
+            Console.WriteLine("Maximum Elevation: " + maxElevation);
+            Console.WriteLine("Average Elevation: " + averageElevation);
+            Console.WriteLine("Total Climbing: " + totalClimbing);
+            Console.WriteLine("Total Descent: " + totalDescent);
+            Console.WriteLine("Final Balance: " + finalBalance);
+
         }
     }
 }

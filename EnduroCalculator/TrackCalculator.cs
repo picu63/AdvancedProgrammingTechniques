@@ -111,8 +111,9 @@ namespace EnduroCalculator
         {
             var altitudeDif = startPoint.Altitude - endPoint.Altitude;
             var distance = startPoint.GetGeoCoordinate().GetDistanceTo(endPoint.GetGeoCoordinate());
-            var radians = Math.Tan(altitudeDif / distance); ;
+            var radians = Math.Tan(altitudeDif / distance);
             return radians * (180 / Math.PI);
+           
         }
     }
 }

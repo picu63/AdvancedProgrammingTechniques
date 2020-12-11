@@ -41,6 +41,12 @@ namespace EnduroCalculator
         public override void PrintResult()
         {
             var total = times.Max() - times.Min();
+            Console.WriteLine("Time");
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Total Track Time: " + total);
+            Console.WriteLine("Climbing Time: " + climbingTime);
+            Console.WriteLine("Descent Time: " + descentTime);
+            Console.WriteLine("Flat Time: " + flatTime);
         }
     }
 }

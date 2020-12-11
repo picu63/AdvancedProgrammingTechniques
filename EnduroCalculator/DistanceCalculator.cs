@@ -25,7 +25,6 @@ namespace EnduroCalculator
                 distance += first.GetDistanceTo(second);
                 geoCoordinates = geoCoordinates.Skip(1);
             }
-
             return distance;
         }
 
@@ -75,7 +74,6 @@ namespace EnduroCalculator
                     geoCoordinates = geoCoordinates.Skip(1);
                 }
             }
-
             return distance;
         }
     }

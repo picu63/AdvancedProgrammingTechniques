@@ -50,6 +50,14 @@ namespace EnduroCalculator
             var averageClimbing = climbingSpeeds.Average();
             var averageDescent = descentSpeeds.Average();
             var averageFlat = flatSpeeds.Average();
+            Console.WriteLine("Speed");
+            Console.WriteLine("----------------------------------");
+            Console.WriteLine("Minimum Speed: " + minSpeed);
+            Console.WriteLine("Maximum Speed: " + maxSpeed);
+            Console.WriteLine("Average Speed: " + averageSpeed);
+            Console.WriteLine("Average Climbing Speed: " + averageClimbing);
+            Console.WriteLine("Average Descent Speed: " + averageDescent);
+            Console.WriteLine("Average Flat Speed: " + averageFlat);
         }
     }
 }
