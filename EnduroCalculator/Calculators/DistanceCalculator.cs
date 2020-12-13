@@ -40,10 +40,10 @@ namespace EnduroCalculator.Calculators
         {
             Console.WriteLine("Distance");
             Console.WriteLine("----------------------------------");
-            Console.WriteLine("Total Distance: " + _totalDistance);
-            Console.WriteLine("Climbing Distance: " + _climbDistance);
-            Console.WriteLine("Descent Distance: " + _descentDistance);
-            Console.WriteLine("Flat Distance: " + _flatDistance);
+            Console.WriteLine("Total Distance: " + _totalDistance.ToString("##.00 'm'"));
+            Console.WriteLine("Climbing Distance: " + _climbDistance.ToString("##.00 'm'"));
+            Console.WriteLine("Descent Distance: " + _descentDistance.ToString("##.00 'm'"));
+            Console.WriteLine("Flat Distance: " + _flatDistance.ToString("##.00 'm'"));
         }
     }
 }

@@ -42,9 +42,9 @@ namespace EnduroCalculator.Calculators
             Console.WriteLine("Time");
             Console.WriteLine("----------------------------------");
             Console.WriteLine("Total Track Time: " + total);
-            Console.WriteLine("Climbing Time: " + _climbingTime);
-            Console.WriteLine("Descent Time: " + _descentTime);
-            Console.WriteLine("Flat Time: " + _flatTime);
+            Console.WriteLine("Climbing Time: " + TimeSpan.FromSeconds(_climbingTime));
+            Console.WriteLine("Descent Time: " + TimeSpan.FromSeconds(_descentTime));
+            Console.WriteLine("Flat Time: " + TimeSpan.FromSeconds(_flatTime));
         }
     }
 }

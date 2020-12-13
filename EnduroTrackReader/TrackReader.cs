@@ -20,13 +20,17 @@ namespace EnduroTrackReader
 
         private readonly string _path;
 
+        public Track GetTrack()
+        {
+            var track = new Track(GetAllPoints().ToList());
+            return track;
+        }
+
         public IEnumerable<TrackPoint> GetAllPoints()
         {
-            XNamespace gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
-            XDocument gpxDoc = XDocument.Load(_path);
+            var gpx = XNamespace.Get("http://www.topografix.com/GPX/1/1");
+            var gpxDoc = XDocument.Load(_path);
 
-            var asd = gpxDoc.Descendants(gpx + "trkpt");
-            
             var points = gpxDoc.Descendants(gpx + "trkpt")
                 .Select(point => new TrackPoint()
                 {
@@ -41,3 +45,4 @@ namespace EnduroTrackReader
         }
     }
 }
+    

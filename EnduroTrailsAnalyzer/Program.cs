@@ -17,8 +17,7 @@ namespace EnduroTrailsAnalyzer
             if (!File.Exists(filePath)) return;
 
             var trackReader = new TrackReader(filePath);
-            var points = trackReader.GetAllPoints();
-            var track = new Track(points.ToList());
+            var track = trackReader.GetTrack();
 
             new CalculatorService(track)
                 .AddCalculator(new DistanceCalculator())

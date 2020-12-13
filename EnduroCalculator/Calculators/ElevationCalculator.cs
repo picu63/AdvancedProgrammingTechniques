@@ -40,12 +40,12 @@ namespace EnduroCalculator.Calculators
             var finalBalance = maxElevation - minElevation;
             Console.WriteLine("Elevation");
             Console.WriteLine("----------------------------------");
-            Console.WriteLine("Minimum Elevation: " + minElevation);
-            Console.WriteLine("Maximum Elevation: " + maxElevation);
-            Console.WriteLine("Average Elevation: " + averageElevation);
-            Console.WriteLine("Total Climbing: " + _totalClimbing);
-            Console.WriteLine("Total Descent: " + _totalDescent);
-            Console.WriteLine("Final Balance: " + finalBalance);
+            Console.WriteLine("Minimum Elevation: " + minElevation.ToString("##.00 'm above level see'"));
+            Console.WriteLine("Maximum Elevation: " + maxElevation.ToString("##.00 'm above level see'"));
+            Console.WriteLine("Average Elevation: " + averageElevation.ToString("##.00 'meters'"));
+            Console.WriteLine("Total Climbing: " + _totalClimbing.ToString("##.00 'm'"));
+            Console.WriteLine("Total Descent: " + _totalDescent.ToString("##.00 'm'"));
+            Console.WriteLine("Final Balance: " + finalBalance.ToString("##.00 'm'"));
 
         }
     }

@@ -48,12 +48,12 @@ namespace EnduroCalculator.Calculators
             var averageFlat = _flatSpeeds.Average();
             Console.WriteLine("Speed");
             Console.WriteLine("----------------------------------");
-            Console.WriteLine("Minimum Speed: " + minSpeed);
-            Console.WriteLine("Maximum Speed: " + maxSpeed);
-            Console.WriteLine("Average Speed: " + averageSpeed);
-            Console.WriteLine("Average Climbing Speed: " + averageClimbing);
-            Console.WriteLine("Average Descent Speed: " + averageDescent);
-            Console.WriteLine("Average Flat Speed: " + averageFlat);
+            Console.WriteLine("Minimum Speed: " + minSpeed.ToKilometersPerHour().ToString("##.00 'km/h'"));
+            Console.WriteLine("Maximum Speed: " + maxSpeed.ToKilometersPerHour().ToString("##.00 'km/h'"));
+            Console.WriteLine("Average Speed: " + averageSpeed.ToKilometersPerHour().ToString("##.00 'km/h'"));
+            Console.WriteLine("Average Climbing Speed: " + averageClimbing.ToKilometersPerHour().ToString("##.00 'km/h'"));
+            Console.WriteLine("Average Descent Speed: " + averageDescent.ToKilometersPerHour().ToString("##.00 'km/h'"));
+            Console.WriteLine("Average Flat Speed: " + averageFlat.ToKilometersPerHour().ToString("##.00 'km/h'"));
         }
     }
 }
