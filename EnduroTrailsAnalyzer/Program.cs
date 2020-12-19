@@ -25,7 +25,7 @@ namespace EnduroTrailsAnalyzer
                 .AddCalculator(new SpeedCalculator())
                 .AddCalculator(new TimeCalculator())
                 .SetSlope(2)
-                .AddTimeFilter(7200)
+                .AddTimeFilter(new TimeSpan(1,30,0))
                 .CalculateAll()
                 .PrintAllCalculations();
         }

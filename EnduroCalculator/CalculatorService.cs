@@ -72,11 +72,11 @@ namespace EnduroCalculator
             return this;
         }
 
-        public CalculatorService AddTimeFilter(double seconds)
+        public CalculatorService AddTimeFilter(TimeSpan timeSpan)
         {
             foreach (var calculator in _calculators)
             {
-                calculator.TimeFilter = seconds;
+                calculator.TimeFilter = timeSpan.TotalSeconds;
             }
 
             return this;
