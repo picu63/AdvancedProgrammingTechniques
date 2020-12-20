@@ -13,6 +13,7 @@ namespace EnduroTrailsAnalyzer
     {
         static void Main(string[] args)
         {
+
             var filePath = args.FirstOrDefault();
             if (!File.Exists(filePath)) return;
 

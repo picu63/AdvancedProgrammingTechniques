@@ -72,6 +72,11 @@ namespace EnduroCalculator
             return this;
         }
 
+        /// <summary>
+        /// Time filter for each subsequent point.
+        /// </summary>
+        /// <param name="timeSpan"></param>
+        /// <returns></returns>
         public CalculatorService AddTimeFilter(TimeSpan timeSpan)
         {
             foreach (var calculator in _calculators)
