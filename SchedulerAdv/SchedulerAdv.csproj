@@ -12,4 +12,21 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
     <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\OrdersLibrary\OrdersLibrary.csproj" />
+    <ProjectReference Include="..\Scheduler.FileService\Scheduler.FileService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="csv_file_10.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="csv_file_1500.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="csv_file_200.csv">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

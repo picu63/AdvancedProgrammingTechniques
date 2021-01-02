@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Serilog;
+using OrdersLibrary;
+using Scheduler.FileService;
 
 namespace SchedulerAdv
 {
@@ -32,8 +34,8 @@ namespace SchedulerAdv
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    services.AddHostedService<Worker>();
-                    services.AddMediatR(Assembly.GetExecutingAssembly());
+                    services.AddHostedService<SchedulerIntervalService>()
+                    .AddMediatR(Assembly.GetExecutingAssembly());
                 });
     }
 }

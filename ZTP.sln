@@ -41,6 +41,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler.Core", "Scheduler
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Scheduler.FileService", "Scheduler.FileService\Scheduler.FileService.csproj", "{ADE06643-CBED-426E-B87E-CDCBB23A0C7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersLibrary", "OrdersLibrary\OrdersLibrary.csproj", "{F1FFFD9A-7248-4113-83EC-6E0848E80920}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -107,6 +109,10 @@ Global
 		{ADE06643-CBED-426E-B87E-CDCBB23A0C7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ADE06643-CBED-426E-B87E-CDCBB23A0C7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ADE06643-CBED-426E-B87E-CDCBB23A0C7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1FFFD9A-7248-4113-83EC-6E0848E80920}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1FFFD9A-7248-4113-83EC-6E0848E80920}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1FFFD9A-7248-4113-83EC-6E0848E80920}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1FFFD9A-7248-4113-83EC-6E0848E80920}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,6 +133,7 @@ Global
 		{A5E9A71D-687E-4737-A551-C39D12FFDA72} = {89D23424-8786-4BF4-8F64-246E8D6406ED}
 		{0DF75801-6A13-4E43-B11C-B52BF56C1750} = {89D23424-8786-4BF4-8F64-246E8D6406ED}
 		{ADE06643-CBED-426E-B87E-CDCBB23A0C7A} = {89D23424-8786-4BF4-8F64-246E8D6406ED}
+		{F1FFFD9A-7248-4113-83EC-6E0848E80920} = {89D23424-8786-4BF4-8F64-246E8D6406ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {FC1FE6C0-B4E8-421D-A69F-771725B9AC96}

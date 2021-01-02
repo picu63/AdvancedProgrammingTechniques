@@ -11,7 +11,7 @@ using MediatR;
 
 namespace Scheduler.FileService
 {
-    public class ReadFileHandler<T> : IRequestHandler<ReadFile<T>, ICollection<T>>
+    public class ReadFileHandler<TModel> : IRequestHandler<ReadFile<TModel>, ICollection<TModel>>
     {
         private readonly IMediator _mediator;
 
@@ -19,12 +19,12 @@ namespace Scheduler.FileService
         {
             _mediator = mediator;
         }
-        public async Task<ICollection<T>> Handle(ReadFile<T> request, CancellationToken cancellationToken)
+        public async Task<ICollection<TModel>> Handle(ReadFile<TModel> request, CancellationToken cancellationToken)
         {
-            StreamReader streamReader = new StreamReader(request.FilePath);
-            CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
-            var records = csvReader.GetRecords<T>().ToList();
-            await _mediator.Publish(new FileRead(), cancellationToken);
+            var streamReader = new StreamReader(request.FilePath);
+            var csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
+            var records = csvReader.GetRecords<TModel>().Skip(request.Skip).Take(request.Take).ToList();
+            await _mediator.Publish(new FileHasBeenRead(), cancellationToken);
             return records;
         }
     }
