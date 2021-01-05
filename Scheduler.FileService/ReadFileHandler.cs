@@ -6,26 +6,28 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CQRS.MediatR.Event;
+using CQRS.MediatR.Query;
 using CsvHelper;
 using MediatR;
 
 namespace Scheduler.FileService
 {
-    public class ReadFileHandler<TModel> : IRequestHandler<ReadFile<TModel>, ICollection<TModel>>
+    public class ReadFileHandler<T> : IQueryHandler<ReadFile<T>, IEnumerable<T>>
     {
-        private readonly IMediator _mediator;
+        private readonly IEventsBus _eventsBus;
 
-        public ReadFileHandler(IMediator mediator)
+        public ReadFileHandler(IEventsBus eventsBus)
         {
-            _mediator = mediator;
+            _eventsBus = eventsBus;
         }
-        public async Task<ICollection<TModel>> Handle(ReadFile<TModel> request, CancellationToken cancellationToken)
+
+        public async Task<IEnumerable<T>> Handle(ReadFile<T> request, CancellationToken cancellationToken)
         {
-            var streamReader = new StreamReader(request.FilePath);
-            var csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
-            var records = csvReader.GetRecords<TModel>().Skip(request.Skip).Take(request.Take).ToList();
-            await _mediator.Publish(new FileHasBeenRead(), cancellationToken);
-            return records;
+            StreamReader streamReader = new StreamReader(request.FilePath);
+            CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
+            var records = csvReader.GetRecords<T>().Skip(request.Skip).Take(request.Take);
+            return await Task.FromResult(records);
         }
     }
 }

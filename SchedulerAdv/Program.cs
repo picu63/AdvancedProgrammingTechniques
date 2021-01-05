@@ -5,6 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
+using CQRS.Core.Commands;
+using CQRS.Core.Events;
+using CQRS.Core.Queries;
+using CQRS.MediatR.Command;
+using CQRS.MediatR.Event;
+using CQRS.MediatR.Query;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Serilog;
@@ -32,10 +38,17 @@ namespace SchedulerAdv
                         .CreateLogger();
                     loggingBuilder.AddSerilog(logger);
                 })
-                .ConfigureServices((hostContext, services) =>
+                .ConfigureServices((services) =>
                 {
                     services.AddHostedService<SchedulerIntervalService>()
-                    .AddMediatR(Assembly.GetExecutingAssembly());
+                    .AddMediatR(
+                        Assembly.GetExecutingAssembly(),
+                        AppDomain.CurrentDomain.Load("Scheduler.FileService"),
+                        Assembly.GetAssembly(typeof(ReadFile<Order>)),
+                        Assembly.GetAssembly(typeof(FileHasBeenRead)))
+                    .AddSingleton<ICommandBus, CommandBus>()
+                    .AddSingleton<IEventsBus, EventBus>()
+                    .AddSingleton<IQueryBus, QueryBus>(); 
                 });
     }
 }

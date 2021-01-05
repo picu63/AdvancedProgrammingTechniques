@@ -4,7 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using CQRS.MediatR.Command;
+using CQRS.MediatR.Event;
+using CQRS.MediatR.Query;
 using MediatR;
+using Microsoft.AspNetCore.ResponseCaching;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OrdersLibrary;
@@ -16,11 +20,16 @@ namespace SchedulerAdv
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
+        private readonly IQueryBus _queryBus;
+        private readonly ICommandBus _commandBus;
+        private readonly IEventsBus _eventsBus;
         private Timer _timer;
-        public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger, IMediator mediator)
+        public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger, IQueryBus queryBus, ICommandBus commandBus, IEventsBus eventsBus)
         {
-            _mediator = mediator;
             _logger = logger;
+            _queryBus = queryBus;
+            _commandBus = commandBus;
+            _eventsBus = eventsBus;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -39,7 +48,7 @@ namespace SchedulerAdv
 
         private async void Run(object state)
         {
-            await _mediator.Send(new ReadFile<Order>{FilePath = "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_10.csv" });
+            await _queryBus.Send<ReadFile<Order>,IEnumerable<Order>>(new ReadFile<Order>("C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_200.csv"){Skip = 10, Take = 10});
         }
     }
 }
