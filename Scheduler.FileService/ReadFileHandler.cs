@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -13,7 +14,7 @@ using MediatR;
 
 namespace Scheduler.FileService
 {
-    public class ReadFileHandler<T> : IQueryHandler<ReadFile<T>, IEnumerable<T>>
+    public class ReadFileHandler : IQueryHandler<ReadFile, ICollection>
     {
         private readonly IEventsBus _eventsBus;
 
@@ -22,12 +23,15 @@ namespace Scheduler.FileService
             _eventsBus = eventsBus;
         }
 
-        public async Task<IEnumerable<T>> Handle(ReadFile<T> request, CancellationToken cancellationToken)
+        public async Task<ICollection> Handle(ReadFile request, CancellationToken cancellationToken)
         {
-            StreamReader streamReader = new StreamReader(request.FilePath);
-            CsvReader csvReader = new CsvReader(streamReader, CultureInfo.CurrentCulture);
-            var records = csvReader.GetRecords<T>().Skip(request.Skip).Take(request.Take);
-            return await Task.FromResult(records);
+            var type = request.Type;
+            var streamReader = new StreamReader(request.FilePath);
+            var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+            reader.Configuration.HasHeaderRecord = true;
+            var collection = reader.GetRecords(type).ToList();
+            await _eventsBus.Publish(new FileHasBeenRead(request.FilePath, collection.Count), cancellationToken);
+            return collection;
         }
     }
 }

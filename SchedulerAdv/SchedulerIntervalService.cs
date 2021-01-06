@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -48,7 +49,13 @@ namespace SchedulerAdv
 
         private async void Run(object state)
         {
-            await _queryBus.Send<ReadFile<Order>,IEnumerable<Order>>(new ReadFile<Order>("C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_200.csv"){Skip = 10, Take = 10});
+            var collection = await _queryBus.Send<ReadFile, ICollection>(new ReadFile(typeof(Order),
+                "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_200.csv")
+            {Skip = 100, Take = 100});
+            foreach (var order in collection)
+            {
+                Console.WriteLine(order);
+            }
         }
     }
 }

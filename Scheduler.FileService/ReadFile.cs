@@ -8,14 +8,16 @@ using MediatR;
 
 namespace Scheduler.FileService
 {
-    public class ReadFile<T> : IQuery<IEnumerable<T>>
+    public class ReadFile : IQuery<ICollection>
     {
+        public Type Type { get; }
         public string FilePath { get; set; }
         public int Take { get; set; }
         public int Skip { get; set; }
 
-        public ReadFile(string filePath)
+        public ReadFile(Type type,string filePath)
         {
+            Type = type;
             FilePath = filePath;
         }
     }

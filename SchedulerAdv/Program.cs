@@ -44,7 +44,7 @@ namespace SchedulerAdv
                     .AddMediatR(
                         Assembly.GetExecutingAssembly(),
                         AppDomain.CurrentDomain.Load("Scheduler.FileService"),
-                        Assembly.GetAssembly(typeof(ReadFile<Order>)),
+                        Assembly.GetAssembly(typeof(ReadFile)),
                         Assembly.GetAssembly(typeof(FileHasBeenRead)))
                     .AddSingleton<ICommandBus, CommandBus>()
                     .AddSingleton<IEventsBus, EventBus>()

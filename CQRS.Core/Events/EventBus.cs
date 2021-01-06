@@ -14,9 +14,9 @@ namespace CQRS.Core.Events
             _mediator = mediator;
         }
 
-        public Task Publish(IEvent @event, CancellationToken cancellationToken = default)
+        public async Task Publish(IEvent @event, CancellationToken cancellationToken = default)
         {
-            throw new System.NotImplementedException();
+            await _mediator.Publish(@event, cancellationToken);
         }
     }
 }
