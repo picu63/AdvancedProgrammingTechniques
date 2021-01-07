@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace CQRS.MediatR.Event
 {
-    public interface IEventsBus
+    public interface IEventBus
     {
         Task Publish(IEvent @event, CancellationToken cancellationToken = default);
     }

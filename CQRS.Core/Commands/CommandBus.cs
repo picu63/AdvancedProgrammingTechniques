@@ -14,9 +14,9 @@ namespace CQRS.Core.Commands
             _mediator = mediator;
         }
 
-        public Task<Unit> Send(ICommand request, CancellationToken cancellationToken = default)
+        public async Task<Unit> Send<TCommand>(TCommand request, CancellationToken cancellationToken = default) where TCommand : ICommand
         {
-            throw new System.NotImplementedException();
+            return await _mediator.Send(request, cancellationToken);
         }
     }
 }

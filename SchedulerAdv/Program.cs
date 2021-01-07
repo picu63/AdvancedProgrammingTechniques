@@ -16,6 +16,8 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using OrdersLibrary;
 using Scheduler.FileService;
+using Scheduler.FileService.Events;
+using Scheduler.FileService.Queries;
 
 namespace SchedulerAdv
 {
@@ -44,10 +46,10 @@ namespace SchedulerAdv
                     .AddMediatR(
                         Assembly.GetExecutingAssembly(),
                         AppDomain.CurrentDomain.Load("Scheduler.FileService"),
-                        Assembly.GetAssembly(typeof(ReadFile)),
+                        Assembly.GetAssembly(typeof(ReadCsv)),
                         Assembly.GetAssembly(typeof(FileHasBeenRead)))
                     .AddSingleton<ICommandBus, CommandBus>()
-                    .AddSingleton<IEventsBus, EventBus>()
+                    .AddSingleton<IEventBus, EventBus>()
                     .AddSingleton<IQueryBus, QueryBus>(); 
                 });
     }

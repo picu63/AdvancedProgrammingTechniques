@@ -14,6 +14,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using OrdersLibrary;
 using Scheduler.FileService;
+using Scheduler.FileService.Commands;
+using Scheduler.FileService.Queries;
 
 namespace SchedulerAdv
 {
@@ -23,14 +25,14 @@ namespace SchedulerAdv
         private readonly ILogger _logger;
         private readonly IQueryBus _queryBus;
         private readonly ICommandBus _commandBus;
-        private readonly IEventsBus _eventsBus;
+        private readonly IEventBus _eventBus;
         private Timer _timer;
-        public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger, IQueryBus queryBus, ICommandBus commandBus, IEventsBus eventsBus)
+        public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger, IQueryBus queryBus, ICommandBus commandBus, IEventBus eventBus)
         {
             _logger = logger;
             _queryBus = queryBus;
             _commandBus = commandBus;
-            _eventsBus = eventsBus;
+            _eventBus = eventBus;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -49,13 +51,17 @@ namespace SchedulerAdv
 
         private async void Run(object state)
         {
-            var collection = await _queryBus.Send<ReadFile, ICollection>(new ReadFile(typeof(Order),
-                "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_200.csv")
+            var filePath = "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file_200.csv";
+            var writePath = "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file.csv";
+            var collection = await _queryBus.Send<ReadCsv, ICollection>(new ReadCsv(typeof(Order),
+                filePath)
             {Skip = 100, Take = 100});
             foreach (var order in collection)
             {
                 Console.WriteLine(order);
             }
+
+            await _commandBus.Send(new SaveToCsv(writePath, collection));
         }
     }
 }

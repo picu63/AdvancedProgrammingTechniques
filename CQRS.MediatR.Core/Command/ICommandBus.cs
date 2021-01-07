@@ -6,6 +6,7 @@ namespace CQRS.MediatR.Command
 {
     public interface ICommandBus
     {
-        Task<Unit> Send(ICommand request, CancellationToken cancellationToken = default);
+        Task<Unit> Send<TCommand>(TCommand request, CancellationToken cancellationToken = default)
+            where TCommand : ICommand;
     }
 }

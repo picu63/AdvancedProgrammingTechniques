@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using CQRS.MediatR.Event;
-using MediatR;
 using Microsoft.Extensions.Logging;
 
-namespace Scheduler.FileService
+namespace Scheduler.FileService.Events
 {
     public class FileHasBeenReadHandler: IEventHandler<FileHasBeenRead>
     {

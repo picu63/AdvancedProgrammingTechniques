@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CQRS.MediatR.Event;
-using MediatR;
+﻿using CQRS.MediatR.Event;
 
-namespace Scheduler.FileService
+namespace Scheduler.FileService.Events
 {
     public class FileHasBeenRead: IEvent
     {

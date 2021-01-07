@@ -341,3 +341,4 @@ healthchecksdb
 
 #Log files
 *.log
+/SchedulerAdv/csv_file.csv

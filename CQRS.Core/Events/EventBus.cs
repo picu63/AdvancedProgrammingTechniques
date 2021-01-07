@@ -5,7 +5,7 @@ using MediatR;
 
 namespace CQRS.Core.Events
 {
-    public class EventBus : IEventsBus
+    public class EventBus : IEventBus
     {
         private readonly IMediator _mediator;
 
