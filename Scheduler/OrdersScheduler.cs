@@ -108,6 +108,7 @@ namespace Scheduler
             _logger.LogInformation("Starting sending process...");
             var orderMailService = new OrderMailService(_smtpClient, _logger);
             await orderMailService.SendOrders(orders, stoppingToken);
+            
         }
         #endregion
 

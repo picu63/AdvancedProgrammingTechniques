@@ -17,16 +17,17 @@
     <ProjectReference Include="..\CQRS.Core\CQRS.Core.csproj" />
     <ProjectReference Include="..\OrdersLibrary\OrdersLibrary.csproj" />
     <ProjectReference Include="..\Scheduler.FileService\Scheduler.FileService.csproj" />
+    <ProjectReference Include="..\Scheduler.MailService\Scheduler.MailService.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="csv_file_10.csv">
+    <None Update="TestFiles\csv_file_10.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="csv_file_1500.csv">
+    <None Update="TestFiles\csv_file_1500.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="csv_file_200.csv">
+    <None Update="TestFiles\csv_file_200.csv">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

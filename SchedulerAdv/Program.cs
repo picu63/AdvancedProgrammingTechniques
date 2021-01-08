@@ -46,11 +46,10 @@ namespace SchedulerAdv
                     .AddMediatR(
                         Assembly.GetExecutingAssembly(),
                         AppDomain.CurrentDomain.Load("Scheduler.FileService"),
-                        Assembly.GetAssembly(typeof(ReadCsv)),
-                        Assembly.GetAssembly(typeof(FileHasBeenRead)))
+                        AppDomain.CurrentDomain.Load("Scheduler.MailService"))
                     .AddSingleton<ICommandBus, CommandBus>()
                     .AddSingleton<IEventBus, EventBus>()
-                    .AddSingleton<IQueryBus, QueryBus>(); 
+                    .AddSingleton<IQueryBus, QueryBus>();
                 });
     }
 }
