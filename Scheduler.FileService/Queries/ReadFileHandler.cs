@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace Scheduler.FileService.Queries
             var streamReader = new StreamReader(request.FilePath);
             var reader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
             reader.Configuration.HasHeaderRecord = true;
-            var collection = reader.GetRecords(type).ToList();
+            var collection = reader.GetRecords(type).Skip(request.Skip).Take(request.Take).ToList();
             await _eventBus.Publish(new FileHasBeenRead(request.FilePath, collection.Count), cancellationToken);
             return collection;
         }

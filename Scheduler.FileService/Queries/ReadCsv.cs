@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using CQRS.MediatR.Query;
 
 namespace Scheduler.FileService.Queries

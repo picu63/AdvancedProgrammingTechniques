@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using CQRS.MediatR.Command;
-using CQRS.MediatR.Query;
+﻿using CQRS.MediatR.Query;
 using MimeKit;
 using OrdersLibrary;
 
-namespace Scheduler.MailService
+namespace Scheduler.MailService.Queries
 {
     public class ConvertOrderToMessage: IQuery<MimeMessage>
     {

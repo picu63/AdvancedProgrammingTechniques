@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using CQRS.MediatR.Query;
 using MimeKit;
 
-namespace Scheduler.MailService
+namespace Scheduler.MailService.Queries
 {
     public class MessageConverterHandler: IQueryHandler<ConvertOrderToMessage, MimeMessage>
     {

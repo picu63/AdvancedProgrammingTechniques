@@ -19,6 +19,8 @@ using Scheduler.FileService;
 using Scheduler.FileService.Commands;
 using Scheduler.FileService.Queries;
 using Scheduler.MailService;
+using Scheduler.MailService.Commands;
+using Scheduler.MailService.Queries;
 
 namespace SchedulerAdv
 {
@@ -26,7 +28,7 @@ namespace SchedulerAdv
     {
         private readonly IMediator _mediator;
         private readonly ILogger _logger;
-        private readonly IConfiguration _config;
+        private readonly IConfiguration _configuration;
         private readonly IQueryBus _queryBus;
         private readonly ICommandBus _commandBus;
         private readonly IEventBus _eventBus;
@@ -38,6 +40,7 @@ namespace SchedulerAdv
         private int _maxMailsAtOnce;
         private int _cycleTimeMilisec;
         private string _filePath;
+        private int skipCounter;
 
         public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger,
             IConfiguration configuration,
@@ -46,7 +49,7 @@ namespace SchedulerAdv
             IEventBus eventBus)
         {
             _logger = logger;
-            _config = configuration;
+            _configuration = configuration;
             _queryBus = queryBus;
             _commandBus = commandBus;
             _eventBus = eventBus;
@@ -55,16 +58,21 @@ namespace SchedulerAdv
         public Task StartAsync(CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Orders service is starting.");
-            _host = _config.GetValue<string>("Smtp:Server");
-            _port = _config.GetValue<int>("Smtp:Port");
-            _from = _config.GetValue<string>("Smtp:FromAddress");
-            _password = _config.GetValue<string>("Smtp:Password");
-            _maxMailsAtOnce = _config.GetValue<int>(key: "MaxMailsAtOnce");
-            _cycleTimeMilisec = _config.GetValue<int>("CycleTimeMilisec");
-            _filePath = _config.GetValue<string>("CsvFilePath");
-
-            _timer = new Timer(RunProcess, cancellationToken, TimeSpan.Zero, TimeSpan.FromSeconds(60));
+            ReadConfigurationFile();
+            skipCounter = 0;
+            _timer = new Timer(RunProcess, cancellationToken, TimeSpan.Zero, TimeSpan.FromMilliseconds(_cycleTimeMilisec));
             return Task.CompletedTask;
+        }
+
+        private void ReadConfigurationFile()
+        {
+            _host = _configuration.GetValue<string>("Smtp:Server");
+            _port = _configuration.GetValue<int>("Smtp:Port");
+            _from = _configuration.GetValue<string>("Smtp:FromAddress");
+            _password = _configuration.GetValue<string>("Smtp:Password");
+            _maxMailsAtOnce = _configuration.GetValue<int>(key: "MaxMailsAtOnce");
+            _cycleTimeMilisec = _configuration.GetValue<int>("CycleTimeMilisec");
+            _filePath = _configuration.GetValue<string>("CsvFilePath");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -76,24 +84,20 @@ namespace SchedulerAdv
 
         private async void RunProcess(object state)
         {
-            if (state is CancellationToken)
-            {
-                _logger.LogInformation("state jest cancellation tokenem");
-            }
+            var cancellationToken = (CancellationToken) state;
             const string writePath = "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file.csv";
-            var collection = await _queryBus.Send<ReadCsv, ICollection>(new ReadCsv(typeof(Order),
-                _filePath) {Skip = 100, Take = 100});
-            foreach (var o in collection)
+            var ordersToSend = (await _queryBus.Send<ReadCsv, ICollection>(new ReadCsv(typeof(Order),
+                _filePath) {Skip = skipCounter, Take = _maxMailsAtOnce}, cancellationToken)).Cast<Order>().ToList();
+            skipCounter += _maxMailsAtOnce;
+            foreach(var order in ordersToSend)
             {
-                var order = o as Order;
-                var message = await _queryBus.Send<ConvertOrderToMessage, MimeMessage>(new ConvertOrderToMessage(order));
-                var recepient = order.Email;
+                var message = await _queryBus.Send<ConvertOrderToMessage, MimeMessage>(new ConvertOrderToMessage(order), cancellationToken);
+                var recepient = order?.Email;
                 await _commandBus.Send(new SendMail(message, InternetAddress.Parse(_from),
-                    InternetAddressList.Parse(recepient), _host, _port, _from, _password));
+                    InternetAddressList.Parse(recepient), _host, _port, _from, _password), cancellationToken);
             }
-
-            await _commandBus.Send(new SaveToCsv(writePath, collection));
             
+            await _commandBus.Send(new SaveToCsv(writePath, ordersToSend), cancellationToken);
         }
     }
 }

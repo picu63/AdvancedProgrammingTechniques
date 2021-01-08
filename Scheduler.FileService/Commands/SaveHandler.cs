@@ -30,6 +30,5 @@ namespace Scheduler.FileService.Commands
             await _eventBus.Publish(new RecordsSavedToFile(request.FilePath, request.Collection.Count), cancellationToken);
             return Unit.Value;
         }
-
     }
 }

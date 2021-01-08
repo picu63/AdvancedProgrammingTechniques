@@ -1,9 +1,7 @@
-﻿using System;
-using CQRS.MediatR.Command;
-using MailKit.Net.Smtp;
+﻿using CQRS.MediatR.Command;
 using MimeKit;
 
-namespace Scheduler.MailService
+namespace Scheduler.MailService.Commands
 {
     public class SendMail : ICommand
     {
