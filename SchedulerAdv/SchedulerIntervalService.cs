@@ -26,7 +26,6 @@ namespace SchedulerAdv
 {
     public class SchedulerIntervalService : IHostedService
     {
-        private readonly IMediator _mediator;
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
         private readonly IQueryBus _queryBus;
@@ -39,8 +38,9 @@ namespace SchedulerAdv
         private string _password;
         private int _maxMailsAtOnce;
         private int _cycleTimeMilisec;
-        private string _filePath;
-        private int skipCounter;
+        private string _readFilePath;
+        private int _skipCounter;
+        private string _writeFilePath;
 
         public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger,
             IConfiguration configuration,
@@ -59,7 +59,7 @@ namespace SchedulerAdv
         {
             _logger.LogInformation($"Orders service is starting.");
             ReadConfigurationFile();
-            skipCounter = 0;
+            _skipCounter = 0;
             _timer = new Timer(RunProcess, cancellationToken, TimeSpan.Zero, TimeSpan.FromMilliseconds(_cycleTimeMilisec));
             return Task.CompletedTask;
         }
@@ -72,7 +72,8 @@ namespace SchedulerAdv
             _password = _configuration.GetValue<string>("Smtp:Password");
             _maxMailsAtOnce = _configuration.GetValue<int>(key: "MaxMailsAtOnce");
             _cycleTimeMilisec = _configuration.GetValue<int>("CycleTimeMilisec");
-            _filePath = _configuration.GetValue<string>("CsvFilePath");
+            _readFilePath = _configuration.GetValue<string>("ReadFilePath");
+            _writeFilePath = _configuration.GetValue<string>("WriteFilePath");
         }
 
         public Task StopAsync(CancellationToken cancellationToken)
@@ -85,19 +86,20 @@ namespace SchedulerAdv
         private async void RunProcess(object state)
         {
             var cancellationToken = (CancellationToken) state;
-            const string writePath = "C:\\Users\\picu6\\source\\repos\\ZTP\\SchedulerAdv\\csv_file.csv";
             var ordersToSend = (await _queryBus.Send<ReadCsv, ICollection>(new ReadCsv(typeof(Order),
-                _filePath) {Skip = skipCounter, Take = _maxMailsAtOnce}, cancellationToken)).Cast<Order>().ToList();
-            skipCounter += _maxMailsAtOnce;
+                _readFilePath) {Skip = _skipCounter, Take = _maxMailsAtOnce}, cancellationToken)).Cast<Order>().ToList();
+            _skipCounter += _maxMailsAtOnce;
+            var ordersSended = new List<Order>();
             foreach(var order in ordersToSend)
             {
                 var message = await _queryBus.Send<ConvertOrderToMessage, MimeMessage>(new ConvertOrderToMessage(order), cancellationToken);
                 var recepient = order?.Email;
                 await _commandBus.Send(new SendMail(message, InternetAddress.Parse(_from),
                     InternetAddressList.Parse(recepient), _host, _port, _from, _password), cancellationToken);
+                ordersSended.Add(order);
             }
             
-            await _commandBus.Send(new SaveToCsv(writePath, ordersToSend), cancellationToken);
+            await _commandBus.Send(new SaveToCsv(_writeFilePath, ordersSended), cancellationToken);
         }
     }
 }
