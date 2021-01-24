@@ -1,18 +1,10 @@
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Reflection;
-using CQRS.Core.Commands;
-using CQRS.Core.Events;
-using CQRS.Core.Queries;
-using CQRS.MediatR.Command;
-using CQRS.MediatR.Event;
-using CQRS.MediatR.Query;
-using MediatR;
-using Microsoft.Extensions.Configuration;
+using SchedulerAkka.MailService;
 using Serilog;
 
-namespace SchedulerAdv
+namespace SchedulerAkka
 {
     public class Program
     {
@@ -35,14 +27,7 @@ namespace SchedulerAdv
                 })
                 .ConfigureServices((services) =>
                 {
-                    services.AddHostedService<SchedulerIntervalService>()
-                    .AddMediatR(
-                        Assembly.GetExecutingAssembly(),
-                        AppDomain.CurrentDomain.Load("Scheduler.FileService"),
-                        AppDomain.CurrentDomain.Load("Scheduler.MailService"))
-                    .AddSingleton<ICommandBus, CommandBus>()
-                    .AddSingleton<IEventBus, EventBus>()
-                    .AddSingleton<IQueryBus, QueryBus>();
+                    services.AddHostedService<SchedulerIntervalService>();
                 });
     }
 }

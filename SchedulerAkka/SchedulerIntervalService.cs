@@ -1,31 +1,23 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using CQRS.MediatR.Command;
-using CQRS.MediatR.Event;
-using CQRS.MediatR.Query;
+using Akka.Actor;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MimeKit;
-using OrdersLibrary;
-using Scheduler.FileService.Commands;
-using Scheduler.FileService.Queries;
-using Scheduler.MailService.Commands;
-using Scheduler.MailService.Queries;
+using SchedulerAkka.FileService;
+using SchedulerAkka.MailService;
+using Order = SchedulerAkka.OrdersLibrary.Order;
 
-namespace SchedulerAdv
+namespace SchedulerAkka
 {
     public class SchedulerIntervalService : IHostedService
     {
         private readonly ILogger _logger;
         private readonly IConfiguration _configuration;
-        private readonly IQueryBus _queryBus;
-        private readonly ICommandBus _commandBus;
-        private readonly IEventBus _eventBus;
         private Timer _timer;
         private string _host;
         private int _port;
@@ -36,18 +28,17 @@ namespace SchedulerAdv
         private string _readFilePath;
         private int _skipCounter;
         private string _writeFilePath;
+        private ActorSystem _system;
+        private IActorRef _messageSenderReceiveActor;
+        private IActorRef _dataReaderReceiveActor;
+        private IActorRef _dataWriterReceiveActor;
+        private IActorRef _messageConverterReceiveActor;
 
         public SchedulerIntervalService(ILogger<SchedulerIntervalService> logger,
-            IConfiguration configuration,
-            IQueryBus queryBus,
-            ICommandBus commandBus,
-            IEventBus eventBus)
+            IConfiguration configuration)
         {
             _logger = logger;
             _configuration = configuration;
-            _queryBus = queryBus;
-            _commandBus = commandBus;
-            _eventBus = eventBus;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -55,6 +46,11 @@ namespace SchedulerAdv
             _logger.LogInformation($"Orders service is starting.");
             ReadConfigurationFile();
             _skipCounter = 0;
+            _system = ActorSystem.Create("SchedulerAkka");
+            _messageSenderReceiveActor = _system.ActorOf<MessageSenderReceiveActor>();
+            _dataReaderReceiveActor = _system.ActorOf<DataReaderReceiveActor>();
+            _dataWriterReceiveActor = _system.ActorOf<DataWriterReceiveActor>();
+            _messageConverterReceiveActor = _system.ActorOf<MessageConverterReceiveActor>();
             _timer = new Timer(RunProcess, cancellationToken, TimeSpan.Zero, TimeSpan.FromMilliseconds(_cycleTimeMilisec));
             return Task.CompletedTask;
         }
@@ -80,21 +76,25 @@ namespace SchedulerAdv
 
         private async void RunProcess(object state)
         {
-            var cancellationToken = (CancellationToken) state;
-            var ordersToSend = (await _queryBus.Send<ReadCsv, ICollection>(new ReadCsv(typeof(Order),
-                _readFilePath) {Skip = _skipCounter, Take = _maxMailsAtOnce}, cancellationToken)).Cast<Order>().ToList();
-            _skipCounter += _maxMailsAtOnce;
-            var ordersSended = new List<Order>();
-            foreach(var order in ordersToSend)
+            var cancellationToken = (CancellationToken)state;
+            var ordersToSend = (await _dataReaderReceiveActor
+                .Ask<List<object>>(new RecordsReaderMessage(_readFilePath, typeof(Order)){Skip = _skipCounter, Take = _maxMailsAtOnce}, cancellationToken))
+                .Cast<Order>();
+            foreach (var order in ordersToSend)
             {
-                var message = await _queryBus.Send<ConvertOrderToMessage, MimeMessage>(new ConvertOrderToMessage(order), cancellationToken);
-                var recepient = order?.Email;
-                await _commandBus.Send(new SendMail(message, InternetAddress.Parse(_from),
-                    InternetAddressList.Parse(recepient), _host, _port, _from, _password), cancellationToken);
-                ordersSended.Add(order);
+                var message = await _messageConverterReceiveActor
+                    .Ask<MimeMessage>(order);
+                Console.WriteLine(await _messageSenderReceiveActor
+                    .Ask(new SendEmailMessage(message,
+                        InternetAddress.Parse(_from),
+                        InternetAddressList.Parse(order.Email),
+                        _host,
+                        _port,
+                        _from,
+                        _password)));
             }
-            
-            await _commandBus.Send(new SaveToCsv(_writeFilePath, ordersSended), cancellationToken);
+            await _dataWriterReceiveActor
+                .Ask(new RecordsWriterMessage(_writeFilePath, ordersToSend.ToList()));
         }
     }
 }
